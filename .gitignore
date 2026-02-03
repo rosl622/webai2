@@ -1,0 +1,17 @@
+# Streamlit
+.streamlit/secrets.toml
+.streamlit/
+!/.streamlit/config.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.venv
+.env
+venv/
+env/
+
+# Data (Optional: depending on if you want to share data/archive)
+# Keeping data since the user wants a personal newsroom, but ignoring large history could be good.
+# For now, we will commit data as per the initial design (using repo as storage).
