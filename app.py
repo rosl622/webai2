@@ -2,7 +2,33 @@ import streamlit as st
 import datetime
 import time
 import pandas as pd
+import json
 from services import data_service, rss_service, gemini_service
+
+# --- Utils ---
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+def clean_text(text):
+    if not text:
+        return ""
+    # 1. Convert to string and strip surrounding whitespace
+    cleaned = str(text).strip()
+    
+    # 2. Remove potential list artifacts (start/end brackets and quotes if it looks like a python list representation)
+    if cleaned.startswith("['") and cleaned.endswith("']"):
+        cleaned = cleaned[2:-2]
+    elif cleaned.startswith('["') and cleaned.endswith('"]'):
+        cleaned = cleaned[2:-2]
+        
+    # 3. Handle escaped newlines (turn literal \n into legitimate newline characters)
+    cleaned = cleaned.replace("\\n", "\n")
+    
+    # 4. Remove Markdown Bold artifacts (**) as requested
+    cleaned = cleaned.replace("**", "")
+    
+    return cleaned
 
 # --- Page Config ---
 st.set_page_config(
@@ -11,6 +37,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Load Custom CSS
+try:
+    load_css("assets/style.css")
+except FileNotFoundError:
+    st.warning("CSS file not found. Styles might be missing.")
 
 # --- Session State Init ---
 if 'admin_logged_in' not in st.session_state:
@@ -40,7 +72,41 @@ def render_newsroom():
     
     if content:
         st.markdown("---")
-        st.markdown(content)
+        try:
+            # Attempt to parse JSON
+            data = json.loads(content)
+            
+            # 1. Headline Box
+            st.markdown("<h3>🟦 오늘의 메인 헤드라인</h3>", unsafe_allow_html=True)
+            head_html = f"""
+            <div class="news-box box-headline">
+                <div class="news-content">{clean_text(data.get('headline', ''))}</div>
+            </div>
+            """
+            st.markdown(head_html, unsafe_allow_html=True)
+
+            # 2. Trends Box
+            st.markdown("<h3>💠 주요 트렌드 & 이슈</h3>", unsafe_allow_html=True)
+            trend_html = f"""
+            <div class="news-box box-trends">
+                <div class="news-content">{clean_text(data.get('trends', ''))}</div>
+            </div>
+            """
+            st.markdown(trend_html, unsafe_allow_html=True)
+
+            # 3. Insight Box
+            st.markdown("<h3>🏙️ 기술적 통찰과 전망</h3>", unsafe_allow_html=True)
+            insight_html = f"""
+            <div class="news-box box-insight">
+                <div class="news-content">{clean_text(data.get('insight', ''))}</div>
+            </div>
+            """
+            st.markdown(insight_html, unsafe_allow_html=True)
+
+        except json.JSONDecodeError:
+            # Fallback for old archive data (which is plain markdown)
+            st.markdown(content)
+
     else:
         st.info(f"No briefing available for {date_str}.")
         if date_str == datetime.date.today().strftime("%Y-%m-%d"):
@@ -116,6 +182,44 @@ def render_admin():
                 
                 with st.spinner("Analyzing with Gemini AI... (This may take a moment)"):
                     gemini_service.configure_gemini(gemini_key)
+                    # Helper to display boxed content
+                    def display_boxed_content(content_str):
+                        try:
+                            # Attempt to parse JSON
+                            data = json.loads(content_str)
+                            
+                            # 1. Headline Box
+                            st.markdown("<h3>🟦 오늘의 메인 헤드라인</h3>", unsafe_allow_html=True)
+                            head_html = f"""
+                            <div class="news-box box-headline">
+                                <div class="news-content">{clean_text(data.get('headline', ''))}</div>
+                            </div>
+                            """
+                            st.markdown(head_html, unsafe_allow_html=True)
+
+                            # 2. Trends Box
+                            st.markdown("<h3>💠 주요 트렌드 & 이슈</h3>", unsafe_allow_html=True)
+                            trend_html = f"""
+                            <div class="news-box box-trends">
+                                <div class="news-content">{clean_text(data.get('trends', ''))}</div>
+                            </div>
+                            """
+                            st.markdown(trend_html, unsafe_allow_html=True)
+
+                            # 3. Insight Box
+                            st.markdown("<h3>🏙️ 기술적 통찰과 전망</h3>", unsafe_allow_html=True)
+                            insight_html = f"""
+                            <div class="news-box box-insight">
+                                <div class="news-content">{clean_text(data.get('insight', ''))}</div>
+                            </div>
+                            """
+                            st.markdown(insight_html, unsafe_allow_html=True)
+                            
+                        except json.JSONDecodeError:
+                            # Fallback to legacy markdown if JSON fails
+                            st.error("Failed to parse structured data. Showing raw output:")
+                            st.markdown(content_str)
+
                     summary = gemini_service.generate_news_summary(news_items)
                     
                     # Save for today
@@ -124,7 +228,7 @@ def render_admin():
                     
                     st.success("Analysis Complete! Saved to daily archive.")
                     st.markdown("### Preview")
-                    st.markdown(summary)
+                    display_boxed_content(summary)
 
     with tab3:
         st.subheader("Traffic Stats")
@@ -145,3 +249,4 @@ if page == "Newsroom":
     render_newsroom()
 elif page == "Admin Dashboard":
     render_admin()
+

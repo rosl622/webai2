@@ -1,0 +1,117 @@
+/* Global Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+/* General Styles */
+.stApp {
+    font-family: 'Noto Sans KR', sans-serif !important;
+    background-color: #F8FAFC;
+    /* Slate 50 background for contrast */
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 700 !important;
+    color: #1E293B;
+    /* Slate 800 */
+}
+
+/* Box Container Style - Modern Glassy/Card Look */
+.news-box {
+    background-color: #ffffff;
+    border-radius: 16px;
+    /* Slightly more rounded */
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    /* Slate 200 border */
+    border-left-width: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.news-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Specific Section Accents - Blue Palette */
+.box-headline {
+    border-left-color: #2563EB;
+    /* Royal Blue (Blue 600) */
+}
+
+.box-trends {
+    border-left-color: #0EA5E9;
+    /* Sky Blue (Sky 500) */
+}
+
+.box-insight {
+    border-left-color: #6366F1;
+    /* Indigo (Indigo 500) */
+}
+
+/* Typography inside boxes */
+.news-content {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #475569;
+    /* Slate 600 */
+    white-space: pre-wrap;
+    /* Respect newlines! */
+}
+
+/* Formatted Content Styles */
+/* Strong tags inside news-content will act as badges/headers */
+.news-content strong {
+    display: table;
+    /* Fit content */
+    margin-top: 16px;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-weight: 700;
+}
+
+/* Apply specific colors to the 'badges' based on box type (heuristic: using sibling selector if possible, but global is easier safely) */
+
+/* Default Blue Theme for Headers */
+.news-content strong {
+    background-color: #E0F2FE;
+    /* Sky 100 */
+    color: #0369A1;
+    /* Sky 700 */
+}
+
+.box-headline .news-content strong {
+    background-color: #EFF6FF;
+    /* Blue 50 */
+    color: #1D4ED8;
+    /* Blue 700 */
+}
+
+.box-trends .news-content strong {
+    background-color: #F0F9FF;
+    /* Sky 50 */
+    color: #0369A1;
+    /* Sky 700 */
+}
+
+.box-insight .news-content strong {
+    background-color: #EEF2FF;
+    /* Indigo 50 */
+    color: #4338CA;
+    /* Indigo 700 */
+}
+
+/* Lists */
+.news-content ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.news-content li {
+    margin-bottom: 12px;
+}
