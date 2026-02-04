@@ -1,3 +1,16 @@
-[
-    "https://news.google.com/rss/search?q=IT&hl=ko&gl=KR&ceid=KR:ko"
-]
+{
+    "IT": [
+        "https://news.google.com/rss/search?q=IT&hl=ko&gl=KR&ceid=KR:ko",
+        "https://www.etnews.com/rss/03.xml",
+        "http://www.inews24.com/rss/news_it.xml",
+        "https://www.boannews.com/custom/news_rss.asp"
+    ],
+    "MVNO": [
+        "http://www.ddaily.co.kr/news/rss.php?cate=02",
+        "https://www.etnews.com/rss/0204.xml",
+        "http://www.inews24.com/rss/news_it.xml",
+        "https://news.google.com/rss/search?q=알뜰폰+OR+MVNO&hl=ko&gl=KR&ceid=KR:ko",
+        "https://kcc.go.kr/user.do?mode=rss&pageId=05020100",
+        "https://www.msit.go.kr/bbs/rss.do?sCode=user&mPid=112&mId=113"
+    ]
+}
