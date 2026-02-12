@@ -64,12 +64,13 @@ def generate_news_summary(news_items, category="IT"):
     내용은 한국어로 작성하고, 전문성 있으면서도 읽기 편한 톤으로 작성해주세요.
     """
 
-    # Updated model list based on available models for your key
+    # Updated model list based on available models key
+    # Prioritizing Lite and Flash models to avoid quota limits
     model_names = [
-        'gemini-1.5-flash',
-        'gemini-2.0-flash', 
         'gemini-2.0-flash-lite',
-        'gemini-1.5-pro',
+        'gemini-2.0-flash', 
+        'gemini-2.5-flash',
+        'gemini-flash-latest'
     ]
     
     last_error = None
