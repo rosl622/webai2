@@ -14,7 +14,8 @@ def fetch_all_feeds(feed_urls):
             feed = feedparser.parse(url)
             source_title = feed.feed.get('title', 'Unknown Source')
             
-            for entry in feed.entries:
+            # Limit to latest 5 entries per feed to avoid token overflow
+            for entry in feed.entries[:5]:
                 # Basic filtering or limit could go here
                 news_item = {
                     'title': entry.get('title', 'No Title'),

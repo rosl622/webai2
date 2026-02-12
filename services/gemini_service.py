@@ -66,10 +66,10 @@ def generate_news_summary(news_items, category="IT"):
 
     # Updated model list based on available models for your key
     model_names = [
+        'gemini-1.5-flash',
         'gemini-2.0-flash', 
-        'gemini-2.5-flash',
         'gemini-2.0-flash-lite',
-        'gemini-flash-latest'
+        'gemini-1.5-pro',
     ]
     
     last_error = None

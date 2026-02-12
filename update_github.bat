@@ -1,6 +1,6 @@
 @echo off
 set /p msg="Enter commit message (Press Enter for default 'Update'): "
-if "%msg%"=="" set msg="Update IT News App"
+if "%msg%"=="" set "msg=Update IT News App"
 
 echo.
 echo Updating GitHub Repository...
