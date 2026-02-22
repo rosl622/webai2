@@ -190,4 +190,55 @@ def increment_views():
     else:
         db.insert("daily_stats", {"date": today, "views": 1})
 
+# --- Comments ---
+def get_comments(page_id):
+    """
+    Fetch comments for a specific page/date.
+    Ordered by created_at desc (newest first).
+    """
+    if not db: return []
+    # Supabase returns ISO strings for timestamps, we can sort in SQL
+    data = db.select("comments", page_id=page_id, order="created_at.desc")
+    return data
+
+def add_comment(page_id, nickname, password, content):
+    """
+    Add a new comment.
+    """
+    if not db: return False
+    
+    # Basic validation
+    if not nickname or not password or not content:
+        return False
+        
+    data = {
+        "page_id": page_id,
+        "nickname": nickname,
+        "password": password,
+        "content": content
+    }
+    
+    res = db.insert("comments", data)
+    return res is not None
+
+def delete_comment(comment_id, password):
+    """
+    Delete a comment if password matches.
+    """
+    if not db: return False
+    
+    # 1. Fetch the comment to verify password
+    # We use select with specific ID
+    target = db.select("comments", id=comment_id)
+    if not target:
+        return False # Comment not found
+    
+    stored_password = target[0]['password']
+    
+    if stored_password == password:
+        # Password match, delete it
+        return db.delete("comments", id=comment_id)
+    else:
+        return False # Wrong password
+
 

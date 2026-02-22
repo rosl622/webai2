@@ -60,13 +60,15 @@ st.logo("assets/logo.svg") # Logo without link, size handling via CSS or SVG adj
 sidebar_header = st.sidebar.empty()
 
 # Navigation
-page = st.sidebar.radio("Navigation", ["IT Newsroom", "MVNO Newsroom", "Admin Dashboard"], label_visibility="collapsed")
+page = st.sidebar.radio("Navigation", ["IT Newsroom", "MVNO Newsroom", "K-startup Newsroom", "Admin Dashboard"], label_visibility="collapsed")
 
 # Update Header based on selection
 if page == "IT Newsroom":
     sidebar_header.title("📰 IT Newsroom")
 elif page == "MVNO Newsroom":
     sidebar_header.title("📱 MVNO Newsroom")
+elif page == "K-startup Newsroom":
+    sidebar_header.title("🚀 K-startup Newsroom")
 else:
     sidebar_header.title("⚙️ Admin Dashboard")
 
@@ -98,8 +100,12 @@ st.sidebar.markdown("""
 # --- Main Functions ---
 
 def render_newsroom(category):
-    title_prefix = "IT" if category == "IT" else "MVNO"
-    st.title(f"{title_prefix} Trends Daily Briefing")
+    title_map = {
+        "IT": "IT Trends Daily Briefing",
+        "MVNO": "MVNO Trends Daily Briefing",
+        "KSTARTUP": "🚀 K-startup Daily Briefing",
+    }
+    st.title(title_map.get(category, f"{category} Daily Briefing"))
     
     # Date Picker
     selected_date = st.date_input("Select Date", datetime.date.today())
@@ -133,7 +139,9 @@ def render_newsroom(category):
             st.markdown(trend_html, unsafe_allow_html=True)
 
             # 3. Insight Box
-            st.markdown("<h3>🏙️ 기술적 통찰과 전망</h3>", unsafe_allow_html=True)
+            # Insight label varies by category
+            insight_label = "🌱 스타트업 생태계 전망" if category == "KSTARTUP" else "🏙️ 기술적 통찰과 전망"
+            st.markdown(f"<h3>{insight_label}</h3>", unsafe_allow_html=True)
             insight_html = f"""
             <div class="news-box box-insight">
                 <div class="news-content">{clean_text(data.get('insight', ''))}</div>
@@ -154,6 +162,58 @@ def render_newsroom(category):
     if 'view_counted' not in st.session_state:
         data_service.increment_views()
         st.session_state.view_counted = True
+        
+    # --- Comments Section ---
+    st.markdown("---")
+    render_comments(f"{category}_{date_str}")
+
+def render_comments(page_id):
+    st.subheader("💬 Comments")
+    
+    # 1. List Comments
+    comments = data_service.get_comments(page_id)
+    if comments:
+        for c in comments:
+            with st.container():
+                col1, col2 = st.columns([8, 1])
+                with col1:
+                    st.markdown(f"**{c['nickname']}** <span style='color:grey; font-size:0.8em'>({c['created_at'][:16].replace('T', ' ')})</span>", unsafe_allow_html=True)
+                    st.markdown(c['content'])
+                with col2:
+                    # Delete button with popover or basic key protection
+                    # Using a unique key for expaneder based on comment id
+                    with st.popover("🗑️"):
+                        pwd = st.text_input("Password", key=f"del_pwd_{c['id']}", type="password")
+                        if st.button("Delete", key=f"del_btn_{c['id']}"):
+                            if data_service.delete_comment(c['id'], pwd):
+                                st.success("Deleted!")
+                                st.rerun()
+                            else:
+                                st.error("Wrong Password")
+                st.divider()
+    else:
+        st.info("No comments yet. Be the first!")
+        
+    # 2. Add Comment Form
+    with st.form(key=f"comment_form_{page_id}"):
+        st.markdown("### Leave a Comment")
+        c1, c2 = st.columns(2)
+        with c1:
+            nick = st.text_input("Nickname")
+        with c2:
+            pwd = st.text_input("Password (for deletion)", type="password")
+        
+        content = st.text_area("Comment")
+        
+        if st.form_submit_button("Post Comment"):
+            if nick and pwd and content:
+                if data_service.add_comment(page_id, nick, pwd, content):
+                    st.success("Comment posted!")
+                    st.rerun()
+                else:
+                    st.error("Failed to post comment.")
+            else:
+                st.warning("Please fill all fields.")
 
 def render_admin():
     st.title("Admin Dashboard")
@@ -173,7 +233,7 @@ def render_admin():
 
     # Category Selection for Admin Actions
     st.markdown("---")
-    res_category = st.radio("Select Target Newsroom", ["IT", "MVNO"], horizontal=True)
+    res_category = st.radio("Select Target Newsroom", ["IT", "MVNO", "KSTARTUP"], horizontal=True)
     st.markdown("---")
 
     # Tabs
@@ -271,6 +331,8 @@ if page == "IT Newsroom":
     render_newsroom("IT")
 elif page == "MVNO Newsroom":
     render_newsroom("MVNO")
+elif page == "K-startup Newsroom":
+    render_newsroom("KSTARTUP")
 elif page == "Admin Dashboard":
     render_admin()
 

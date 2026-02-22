@@ -72,6 +72,13 @@ DEFAULT_FEEDS = {
         "https://www.yna.co.kr/rss/economy/it.xml", # Yonhap IT (General Telecom)
         "https://rss.etnews.com/Section903.xml",    # ETNews Communications/Broadcasting
         # Specific MVNO feeds are rare, using telecom sections
+    ],
+    "KSTARTUP": [
+        "https://platum.kr/feed",                          # 플래텀 (스타트업 전문 미디어)
+        "https://www.venturesquare.net/feed",              # 벤처스퀘어
+        "https://rss.etnews.com/Section902.xml",           # ETNews SW/스타트업
+        "https://www.startuptoday.co.kr/rss/allArticle.xml", # 스타트업투데이
+        "https://www.bloter.net/rss/all",                  # 블로터 (IT/스타트업)
     ]
 }
 

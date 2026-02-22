@@ -1,31 +1,31 @@
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import os
 
 def configure_gemini(api_key):
-    genai.configure(api_key=api_key)
+    global _client
+    _client = genai.Client(api_key=api_key)
 
-def generate_news_summary(news_items):
-    """
-    Sends news items to Gemini and returns a markdown summary.
-    """
-    if not news_items:
-        return "No news items to analyze."
+_client = None
+
 def generate_news_summary(news_items, category="IT"):
-    # Prepare context for the model
-    # We'll truncate/limit to avoid huge context if necessary, 
-    # but 1.5 Flash has a large window so sending many headlines is usually fine.
-    
+    if not news_items:
+        return '{"headline": "No news items to analyze.", "trends": "", "insight": ""}'
+
     news_text = ""
     for item in news_items:
         news_text += f"- {item['title']} : {item['summary']}\n"
-    
+
     # Context customization based on category
     role_description = "IT 전문 뉴스 큐레이터"
     focus_instruction = "오늘 가장 중요한 IT 트렌드를 분석해서"
-    
+
     if category == "MVNO":
         role_description = "통신 및 알뜰폰(MVNO) 산업 전문가"
         focus_instruction = "다음 키워드(MVNO, 알뜰폰, 통신사, 전파사용료, 망 도매대가)를 중심으로 관련 소식을 분석해서"
+    elif category == "KSTARTUP":
+        role_description = "한국 창업 생태계 및 스타트업 전문 애널리스트"
+        focus_instruction = "다음 키워드(스타트업, 창업, 투자유치, VC, 액셀러레이터, 정부지원, 창업정책, K-startup, 유니콘, 시리즈A/B, 팁스, 중기부)를 중심으로 오늘의 주요 창업 생태계 동향을 분석해서"
 
     prompt = f"""
     당신은 {role_description}입니다. 
@@ -51,9 +51,9 @@ def generate_news_summary(news_items, category="IT"):
     
     **작성 지침 (매우 중요):**
     1. **절대 리스트 형식(['...'])으로 작성하지 마십시오.** 하나의 긴 문자열로 작성하세요.
-    2. 줄바꿈이 필요한 곳에는 `\n`을 사용하여 명확히 구분해 주세요.
+    2. 줄바꿈이 필요한 곳에는 `\\n`을 사용하여 명확히 구분해 주세요.
     3. 뉴스 기사처럼 자연스럽고 전문적인 어조로 브리핑하듯 작성하세요.
-    4. 형식 예시: "**[제목]** 내용입니다.\n\n**[다음 제목]** 다음 내용입니다..."
+    4. 형식 예시: "**[제목]** 내용입니다.\\n\\n**[다음 제목]** 다음 내용입니다..."
     
     {{
       "headline": "(가장 중요한 뉴스 1~2개. **[제목]** 형식 사용하여 작성)",
@@ -64,38 +64,30 @@ def generate_news_summary(news_items, category="IT"):
     내용은 한국어로 작성하고, 전문성 있으면서도 읽기 편한 톤으로 작성해주세요.
     """
 
-    # Updated model list based on available models key
-    # Prioritizing Lite and Flash models to avoid quota limits
     model_names = [
-        'gemini-2.0-flash-lite',
-        'gemini-2.0-flash', 
-        'gemini-2.5-flash',
-        'gemini-flash-latest'
+        "gemini-2.0-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-2.5-flash",
+        "gemini-1.5-flash",
     ]
-    
+
     last_error = None
     for model_name in model_names:
         try:
             print(f"Trying model: {model_name}...")
-            model = genai.GenerativeModel(model_name)
-            # Test generation to ensure model works
-            response = model.generate_content(
-                prompt,
-                generation_config={"response_mime_type": "application/json"}
+            response = _client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                ),
             )
             print(f"Success with model: {model_name}")
-            
-            # Basic cleanup if model adds markdown blocks despite instruction
             text = response.text.replace("```json", "").replace("```", "").strip()
             return text
         except Exception as e:
             last_error = e
             print(f"Failed with model {model_name}: {e}")
             continue
-    
-    # If all fail, try to list available models for debugging
-    try:
-        available_models = [m.name for m in genai.list_models()]
-        return f'{{"headline": "Error: All models failed.", "trends": "Available models: {available_models}", "insight": "Last error: {str(last_error)}"}}'
-    except:
-        return f'{{"headline": "Critical Error", "trends": "All models failed", "insight": "{str(last_error)}"}}'
+
+    return f'{{"headline": "Error: All models failed.", "trends": "Last error: {str(last_error)}", "insight": ""}}'
