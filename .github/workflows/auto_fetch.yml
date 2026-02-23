@@ -1,0 +1,42 @@
+name: Daily Newsroom Auto-Fetch
+
+on:
+  # 매일 KST 오전 7시 실행 (UTC 기준 전날 22:00)
+  schedule:
+    - cron: '0 22 * * *'
+  # 수동으로도 실행 가능 (GitHub Actions 탭에서 "Run workflow" 버튼)
+  workflow_dispatch:
+
+jobs:
+  fetch-and-analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install google-genai feedparser requests
+
+      - name: 🚀 Run auto fetch
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python auto_fetch.py
+
+      - name: 📋 Upload log as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auto-fetch-log-${{ github.run_id }}
+          path: auto_fetch.log
+          retention-days: 7
