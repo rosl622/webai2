@@ -60,7 +60,8 @@ if page not in ["IT", "MVNO", "KSTARTUP", "ADMIN"]:
 # =============================================
 # FIXED ADMIN GEAR ICON (top-right)
 # =============================================
-gear_svg = """<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+# Admin gear icon SVG (used in sidebar)
+gear_svg = """<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
      stroke="currentColor" stroke-width="2.2"
      stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="12" r="3"/>
@@ -74,10 +75,6 @@ gear_svg = """<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
            2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0
            1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
 </svg>"""
-
-if st.button("⚙️ Admin", key="admin_gear_btn", help="Admin Dashboard"):
-    st.session_state.page = "ADMIN"
-    st.rerun()
 
 # =============================================
 # SIDEBAR
@@ -121,7 +118,7 @@ nav_stats_html = f"""
 """
 st.sidebar.markdown(nav_stats_html, unsafe_allow_html=True)
 
-st.sidebar.markdown("""
+st.sidebar.markdown(f"""
 <div class="sidebar-footer">
     <a href="mailto:sanghoon.e.kim@gmail.com" class="footer-link" target="_self">
         <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,8 +133,14 @@ st.sidebar.markdown("""
         </svg>
         Eric Kim
     </a>
+    <div class="footer-divider"></div>
 </div>
 """, unsafe_allow_html=True)
+
+# Admin button in sidebar footer (gear icon + label)
+if st.sidebar.button("⚙️  Admin", key="admin_sidebar_btn"):
+    st.session_state.page = "ADMIN"
+    st.rerun()
 
 # =============================================
 # COUNT VIEWS ONCE PER SESSION

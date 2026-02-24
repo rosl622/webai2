@@ -117,6 +117,7 @@ h6 {
     width: calc(100% - 16px) !important;
     text-align: left !important;
     justify-content: flex-start !important;
+    min-height: unset !important;
 }
 
 [data-testid="stSidebar"] .stButton>button:hover {
@@ -169,23 +170,6 @@ h6 {
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
 }
 
-/* Admin gear button (main area top) */
-[data-testid="stMainBlockContainer"]>div:first-child .stButton>button {
-    position: fixed !important;
-    top: 12px !important;
-    right: 68px !important;
-    z-index: 99999 !important;
-    padding: 6px 12px !important;
-    border-radius: 8px !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(8px) !important;
-    border: 1px solid #E2E8F0 !important;
-    color: #64748B !important;
-    font-size: 0.8rem !important;
-    font-weight: 500 !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-    width: auto !important;
-}
 
 /* =============================================
    SIDEBAR STATS
@@ -205,36 +189,27 @@ h6 {
 }
 
 /* =============================================
-   ADMIN GEAR ICON (fixed top-right)
+   SIDEBAR ADMIN BUTTON (footer area)
    ============================================= */
-.admin-gear {
-    position: fixed;
-    top: 12px;
-    right: 68px;
-    z-index: 99999;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    border: 1px solid #E2E8F0;
-    color: #64748B !important;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-decoration: none !important;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+/* Target only the admin_sidebar_btn — it renders after the footer markdown */
+[data-testid="stSidebar"] .stButton:last-child>button {
+    color: #94A3B8 !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+    padding: 6px 10px !important;
+    margin: 0 10px 8px !important;
+    border-radius: 6px !important;
+    width: calc(100% - 20px) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
-.admin-gear:hover {
-    background: #F1F5F9 !important;
-    border-color: #2563EB !important;
+[data-testid="stSidebar"] .stButton:last-child>button:hover {
+    background: #EFF6FF !important;
     color: #2563EB !important;
-    text-decoration: none !important;
-    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* =============================================
@@ -584,7 +559,6 @@ hr {
     font-size: 0.78rem;
 }
 
-
 .footer-link {
     display: flex;
     align-items: center;
@@ -607,6 +581,35 @@ hr {
     width: 14px;
     height: 14px;
     fill: currentColor;
+    flex-shrink: 0;
+}
+
+.footer-divider {
+    height: 1px;
+    background: #E2E8F0;
+    margin: 8px 10px;
+}
+
+.footer-admin-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #64748B;
+    font-size: 0.78rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.footer-admin-row:hover {
+    background: #EFF6FF;
+    color: #2563EB;
+}
+
+.footer-admin-row svg {
+    stroke: currentColor;
     flex-shrink: 0;
 }
 
