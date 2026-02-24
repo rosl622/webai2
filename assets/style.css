@@ -120,10 +120,24 @@ h6 {
     min-height: unset !important;
 }
 
+/* Force left-align on all inner elements Streamlit injects */
+[data-testid="stSidebar"] .stButton>button p,
+[data-testid="stSidebar"] .stButton>button div,
+[data-testid="stSidebar"] .stButton>button span {
+    text-align: left !important;
+    justify-content: flex-start !important;
+    display: inline !important;
+}
+
 [data-testid="stSidebar"] .stButton>button:hover {
     background: rgba(241, 245, 249, 0.9) !important;
     color: #1E293B !important;
     border-color: #E2E8F0 !important;
+}
+
+/* Hide the native Streamlit collapse button — we use a custom FAB */
+[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
 }
 
 /* Active nav item (rendered as HTML div) */

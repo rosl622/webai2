@@ -41,6 +41,74 @@ except FileNotFoundError:
     st.warning("CSS file not found.")
 
 # =============================================
+# SIDEBAR TOGGLE BUTTON (floating, like Claude)
+# =============================================
+st.markdown("""
+<script>
+(function() {
+    function injectToggleBtn() {
+        if (document.getElementById('sidebar-toggle-fab')) return;
+
+        var btn = document.createElement('button');
+        btn.id = 'sidebar-toggle-fab';
+        btn.innerHTML = '&#9776;';
+        btn.title = 'Toggle sidebar';
+        btn.style.cssText = [
+            'position:fixed',
+            'top:14px',
+            'left:14px',
+            'z-index:999999',
+            'width:34px',
+            'height:34px',
+            'border-radius:8px',
+            'border:1px solid #E2E8F0',
+            'background:rgba(255,255,255,0.92)',
+            'backdrop-filter:blur(8px)',
+            'cursor:pointer',
+            'font-size:16px',
+            'color:#64748B',
+            'display:flex',
+            'align-items:center',
+            'justify-content:center',
+            'box-shadow:0 2px 8px rgba(0,0,0,0.08)',
+            'transition:all 0.2s ease',
+            'line-height:1'
+        ].join(';');
+
+        btn.onmouseenter = function() {
+            btn.style.background = '#EFF6FF';
+            btn.style.color = '#2563EB';
+            btn.style.borderColor = '#2563EB';
+        };
+        btn.onmouseleave = function() {
+            btn.style.background = 'rgba(255,255,255,0.92)';
+            btn.style.color = '#64748B';
+            btn.style.borderColor = '#E2E8F0';
+        };
+
+        btn.onclick = function() {
+            var collapseBtn = document.querySelector('[data-testid="stSidebarCollapseButton"] button');
+            if (collapseBtn) { collapseBtn.click(); }
+        };
+
+        document.body.appendChild(btn);
+    }
+
+    // Run after DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectToggleBtn);
+    } else {
+        injectToggleBtn();
+    }
+
+    // Re-check after Streamlit re-renders
+    var observer = new MutationObserver(function() { injectToggleBtn(); });
+    observer.observe(document.body, { childList: true, subtree: false });
+})();
+</script>
+""", unsafe_allow_html=True)
+
+# =============================================
 # SESSION STATE
 # =============================================
 if 'admin_logged_in' not in st.session_state:
