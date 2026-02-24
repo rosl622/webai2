@@ -14,7 +14,7 @@ set SCRIPT_PATH=%SCRIPT_DIR%auto_fetch.py
 
 :: 실행 시간 설정 (기본: 매일 오전 7시 00분)
 :: HH:MM 형식으로 원하는 시간으로 변경하세요.
-set RUN_TIME=07:00
+set RUN_TIME=09:00
 
 echo 작업 스케줄러 등록 중...
 echo.
