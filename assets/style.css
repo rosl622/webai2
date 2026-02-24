@@ -49,13 +49,29 @@ h6 {
 /* =============================================
    SIDEBAR
    ============================================= */
+/* =============================================
+   SIDEBAR COLLAPSE BUTTON FIX
+   (hides the 'keyboard_double_arrow' text artifact)
+   ============================================= */
+[data-testid="stSidebarCollapseButton"] {
+    overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-testid="stSidebarCollapseButton"] p,
+[data-testid="stSidebarCollapseButton"] span:not(svg span) {
+    display: none !important;
+}
+
 [data-testid="stSidebar"] {
     background: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
     border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
-    min-width: 200px !important;
-    max-width: 200px !important;
+    /* No fixed width — allow Streamlit native collapse/expand */
 }
 
 [data-testid="stSidebarContent"] {
@@ -528,17 +544,12 @@ hr {
    SIDEBAR FOOTER
    ============================================= */
 .sidebar-footer {
-    position: fixed;
-    bottom: 18px;
-    left: 8px;
-    width: 184px;
-    padding-top: 12px;
+    padding: 14px 10px 10px;
+    margin-top: 20px;
     border-top: 1px solid #E2E8F0;
     font-size: 0.78rem;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(8px);
-    z-index: 100;
 }
+
 
 .footer-link {
     display: flex;

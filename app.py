@@ -75,7 +75,7 @@ gear_svg = """<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
 </svg>"""
 
 st.markdown(
-    f'<a href="?page=ADMIN" class="admin-gear" title="Admin Dashboard">'
+    f'<a href="?page=ADMIN" class="admin-gear" title="Admin Dashboard" target="_self">'
     f'{gear_svg} Admin</a>',
     unsafe_allow_html=True
 )
@@ -107,7 +107,7 @@ nav_html = '<span class="nav-section-label">Newsrooms</span>'
 for key, icon, label in nav_items:
     cls = active_class_map[key] if page == key else ""
     nav_html += (
-        f'<a href="?page={key}" class="nav-btn {cls}">'
+        f'<a href="?page={key}" class="nav-btn {cls}" target="_self">'
         f'<span class="nav-icon">{icon}</span>{label}'
         f'</a>'
     )
@@ -123,7 +123,7 @@ st.sidebar.markdown(nav_html, unsafe_allow_html=True)
 
 st.sidebar.markdown("""
 <div class="sidebar-footer">
-    <a href="mailto:sanghoon.e.kim@gmail.com" class="footer-link">
+    <a href="mailto:sanghoon.e.kim@gmail.com" class="footer-link" target="_self">
         <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
@@ -323,7 +323,7 @@ def render_comments(page_id):
 # =============================================
 def render_admin():
     st.markdown(
-        '<a href="?page=IT" class="admin-back-link">← Back to Newsroom</a>',
+        '<a href="?page=IT" class="admin-back-link" target="_self">← Back to Newsroom</a>',
         unsafe_allow_html=True
     )
     st.title("⚙️ Admin Dashboard")
