@@ -47,12 +47,13 @@ if 'admin_logged_in' not in st.session_state:
     st.session_state.admin_logged_in = False
 if 'view_counted' not in st.session_state:
     st.session_state.view_counted = False
+if 'page' not in st.session_state:
+    st.session_state.page = "IT"
 
 # =============================================
-# PAGE ROUTING (via query params)
+# PAGE ROUTING (via session state)
 # =============================================
-params = st.query_params
-page = params.get("page", "IT").upper()
+page = st.session_state.page
 if page not in ["IT", "MVNO", "KSTARTUP", "ADMIN"]:
     page = "IT"
 
@@ -74,11 +75,9 @@ gear_svg = """<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
            1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
 </svg>"""
 
-st.markdown(
-    f'<a href="?page=ADMIN" class="admin-gear" title="Admin Dashboard" target="_self">'
-    f'{gear_svg} Admin</a>',
-    unsafe_allow_html=True
-)
+if st.button("⚙️ Admin", key="admin_gear_btn", help="Admin Dashboard"):
+    st.session_state.page = "ADMIN"
+    st.rerun()
 
 # =============================================
 # SIDEBAR
@@ -96,30 +95,31 @@ nav_items = [
     ("KSTARTUP", "🚀", "K-STARTUP"),
 ]
 
-# Active class per category
-active_class_map = {
-    "IT":       "active active-it",
-    "MVNO":     "active active-mvno",
-    "KSTARTUP": "active active-kst",
-}
+# Render nav buttons using Streamlit buttons (no new tab issues)
+st.sidebar.markdown('<span class="nav-section-label">Newsrooms</span>', unsafe_allow_html=True)
 
-nav_html = '<span class="nav-section-label">Newsrooms</span>'
 for key, icon, label in nav_items:
-    cls = active_class_map[key] if page == key else ""
-    nav_html += (
-        f'<a href="?page={key}" class="nav-btn {cls}" target="_self">'
-        f'<span class="nav-icon">{icon}</span>{label}'
-        f'</a>'
-    )
+    is_active = (page == key)
+    btn_label = f"{icon} {label}"
+    # Use custom HTML for active state styling
+    if is_active:
+        active_class_map = {"IT": "active-it", "MVNO": "active-mvno", "KSTARTUP": "active-kst"}
+        st.sidebar.markdown(
+            f'<div class="nav-btn active {active_class_map[key]}"><span class="nav-icon">{icon}</span>{label}</div>',
+            unsafe_allow_html=True
+        )
+    else:
+        if st.sidebar.button(btn_label, key=f"nav_{key}", use_container_width=True):
+            st.session_state.page = key
+            st.rerun()
 
-nav_html += f"""
+nav_stats_html = f"""
 <div class="nav-stats">
     Total Views&nbsp;&nbsp;<span class="stat-value">{stats['total_views']}</span><br>
     Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="stat-value">{today_views}</span>
 </div>
 """
-
-st.sidebar.markdown(nav_html, unsafe_allow_html=True)
+st.sidebar.markdown(nav_stats_html, unsafe_allow_html=True)
 
 st.sidebar.markdown("""
 <div class="sidebar-footer">
@@ -322,10 +322,9 @@ def render_comments(page_id):
 # ADMIN DASHBOARD
 # =============================================
 def render_admin():
-    st.markdown(
-        '<a href="?page=IT" class="admin-back-link" target="_self">← Back to Newsroom</a>',
-        unsafe_allow_html=True
-    )
+    if st.button("← Back to Newsroom", key="admin_back_btn"):
+        st.session_state.page = "IT"
+        st.rerun()
     st.title("⚙️ Admin Dashboard")
 
     secret_password = st.secrets.get("ADMIN_PASSWORD", "admin123")
@@ -433,3 +432,5 @@ elif page == "KSTARTUP":
     render_newsroom("KSTARTUP")
 elif page == "ADMIN":
     render_admin()
+else:
+    render_newsroom("IT")

@@ -96,6 +96,36 @@ h6 {
     display: block;
 }
 
+/* Style Streamlit sidebar buttons as nav items */
+[data-testid="stSidebar"] .stButton>button {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 9px 14px !important;
+    margin: 2px 8px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.18s ease !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: #64748B !important;
+    text-decoration: none !important;
+    border: 1px solid transparent !important;
+    letter-spacing: -0.01em !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: calc(100% - 16px) !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+}
+
+[data-testid="stSidebar"] .stButton>button:hover {
+    background: rgba(241, 245, 249, 0.9) !important;
+    color: #1E293B !important;
+    border-color: #E2E8F0 !important;
+}
+
+/* Active nav item (rendered as HTML div) */
 .nav-btn {
     display: flex;
     align-items: center;
@@ -103,29 +133,9 @@ h6 {
     padding: 9px 14px;
     margin: 2px 8px;
     border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.18s ease;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #64748B !important;
-    text-decoration: none !important;
-    border: 1px solid transparent;
     letter-spacing: -0.01em;
-}
-
-.nav-btn:hover {
-    background: rgba(241, 245, 249, 0.9) !important;
-    color: #1E293B !important;
-    border-color: #E2E8F0;
-    text-decoration: none !important;
-}
-
-.nav-btn.active {
-    background: rgba(255, 255, 255, 0.95) !important;
-    color: #1E40AF !important;
-    border-color: #BFDBFE !important;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-    text-decoration: none !important;
 }
 
 .nav-btn .nav-icon {
@@ -133,6 +143,12 @@ h6 {
     width: 20px;
     text-align: center;
     flex-shrink: 0;
+}
+
+.nav-btn.active {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid #BFDBFE;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
 }
 
 /* Per-newsroom active accent color */
@@ -151,6 +167,24 @@ h6 {
     color: #92400E !important;
     border-color: #FDE68A !important;
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+}
+
+/* Admin gear button (main area top) */
+[data-testid="stMainBlockContainer"]>div:first-child .stButton>button {
+    position: fixed !important;
+    top: 12px !important;
+    right: 68px !important;
+    z-index: 99999 !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #64748B !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    width: auto !important;
 }
 
 /* =============================================
