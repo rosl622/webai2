@@ -142,7 +142,7 @@ h6 {
     align-items: center !important;
     gap: 10px !important;
     padding: 9px 14px !important;
-    margin: 2px 8px !important;
+    margin: 2px 0 !important;
     border-radius: 10px !important;
     cursor: pointer !important;
     transition: all 0.18s ease !important;
@@ -154,12 +154,26 @@ h6 {
     letter-spacing: -0.01em !important;
     background: transparent !important;
     box-shadow: none !important;
-    width: calc(100% - 16px) !important;
+    width: 100% !important;
     text-align: left !important;
     justify-content: flex-start !important;
     height: 38px !important;
-    /* match nav-btn height exactly */
     box-sizing: border-box !important;
+}
+
+/* Zero-out the .stButton WRAPPER div's own padding & margin */
+[data-testid="stSidebar"] .stButton {
+    margin: 0 !important;
+    padding: 0 8px !important;
+    width: 100% !important;
+}
+
+/* Strip internal Streamlit column gap inside sidebar */
+[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"],
+[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
+    gap: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 /* Force left-align on all inner elements Streamlit injects */
