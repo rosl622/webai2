@@ -58,25 +58,6 @@ if page not in ["IT", "MVNO", "KSTARTUP", "ADMIN"]:
     page = "IT"
 
 # =============================================
-# FIXED ADMIN GEAR ICON (top-right)
-# =============================================
-# Admin gear icon SVG (used in sidebar)
-gear_svg = """<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-     stroke="currentColor" stroke-width="2.2"
-     stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="3"/>
-  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06
-           a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09
-           A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83
-           l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4
-           h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1
-           2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1
-           4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1
-           2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0
-           1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-</svg>"""
-
-# =============================================
 # SIDEBAR
 # =============================================
 st.logo("assets/logo.svg")
@@ -85,43 +66,49 @@ stats = data_service.get_stats()
 today_key = datetime.datetime.now().strftime('%Y-%m-%d')
 today_views = stats['daily_views'].get(today_key, 0)
 
-# Nav items — labels shortened, no "Newsroom"
 nav_items = [
     ("IT",       "📡", "IT"),
     ("MVNO",     "📱", "MVNO"),
     ("KSTARTUP", "🚀", "K-STARTUP"),
 ]
 
-# Render nav buttons using Streamlit buttons (no new tab issues)
-st.sidebar.markdown('<span class="nav-section-label">Newsrooms</span>', unsafe_allow_html=True)
+active_class_map = {
+    "IT":       "active-it",
+    "MVNO":     "active-mvno",
+    "KSTARTUP": "active-kst",
+}
 
-for key, icon, label in nav_items:
-    is_active = (page == key)
-    btn_label = f"{icon} {label}"
-    # Use custom HTML for active state styling
-    if is_active:
-        active_class_map = {"IT": "active-it", "MVNO": "active-mvno", "KSTARTUP": "active-kst"}
-        st.sidebar.markdown(
-            f'<div class="nav-btn active {active_class_map[key]}"><span class="nav-icon">{icon}</span>{label}</div>',
-            unsafe_allow_html=True
-        )
-    else:
-        if st.sidebar.button(btn_label, key=f"nav_{key}", use_container_width=True):
-            st.session_state.page = key
-            st.rerun()
+with st.sidebar:
+    # ── Nav section label
+    st.markdown('<div class="nav-section-label">Newsrooms</div>', unsafe_allow_html=True)
 
-nav_stats_html = f"""
+    # ── Nav items
+    for key, icon, label in nav_items:
+        if page == key:
+            # Active: rendered as styled HTML div (no click needed)
+            st.markdown(
+                f'<div class="nav-btn active {active_class_map[key]}">'
+                f'<span>{icon}</span>{label}</div>',
+                unsafe_allow_html=True
+            )
+        else:
+            if st.button(f"{icon}  {label}", key=f"nav_{key}", use_container_width=True):
+                st.session_state.page = key
+                st.rerun()
+
+    # ── Stats
+    st.markdown(f"""
 <div class="nav-stats">
     Total Views&nbsp;&nbsp;<span class="stat-value">{stats['total_views']}</span><br>
     Today&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="stat-value">{today_views}</span>
-</div>
-"""
-st.sidebar.markdown(nav_stats_html, unsafe_allow_html=True)
+</div>""", unsafe_allow_html=True)
 
-st.sidebar.markdown(f"""
+    # ── Footer: email + LinkedIn + Admin
+    st.markdown("""
 <div class="sidebar-footer">
     <a href="mailto:sanghoon.e.kim@gmail.com" class="footer-link" target="_self">
-        <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
         </svg>
@@ -134,13 +121,11 @@ st.sidebar.markdown(f"""
         Eric Kim
     </a>
     <div class="footer-divider"></div>
-</div>
-""", unsafe_allow_html=True)
+</div>""", unsafe_allow_html=True)
 
-# Admin button in sidebar footer (gear icon + label)
-if st.sidebar.button("⚙️  Admin", key="admin_sidebar_btn"):
-    st.session_state.page = "ADMIN"
-    st.rerun()
+    if st.button("⚙️  Admin", key="admin_sidebar_btn"):
+        st.session_state.page = "ADMIN"
+        st.rerun()
 
 # =============================================
 # COUNT VIEWS ONCE PER SESSION

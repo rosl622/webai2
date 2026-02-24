@@ -1,24 +1,41 @@
 /* =============================================
-   NEWSPAPER + GLASSMORPHISM THEME  (Option 3)
-   Eric's AI Newsroom
+   ERIC'S AI NEWSROOM — Unified Style Sheet
+   Design Tokens + Full Streamlit Override
    ============================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-/* =============================================
-   BASE
-   ============================================= */
+/* ── DESIGN TOKENS ── */
+:root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F7F8FA;
+    --bg-sidebar: #F2F3F5;
+    --border-color: #E2E4E8;
+    --text-primary: #1A1D23;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --accent: #3B5BDB;
+    --accent-hover: #2F4AC0;
+    --accent-light: #EEF2FF;
+    --font-size-base: 14px;
+    --font-size-sm: 12px;
+    --font-size-xs: 11px;
+    --sidebar-width: 240px;
+    --transition: all 0.2s ease;
+}
+
+/* ── BASE ── */
 * {
-    font-family: 'Noto Sans KR', 'Noto Sans', sans-serif !important;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif !important;
 }
 
 .stApp {
-    background: linear-gradient(135deg, #F0F4FF 0%, #F8FAFC 50%, #F0F7FF 100%) !important;
-    color: #1E293B !important;
-    min-height: 100vh;
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
-/* Hide default Streamlit chrome */
+/* ── HIDE DEFAULT STREAMLIT CHROME ── */
 #MainMenu {
     visibility: hidden;
 }
@@ -35,140 +52,150 @@ header {
     display: none;
 }
 
-h1,
-h2,
-h3,
+/* ── MAIN CONTENT BLOCK ── */
+.main .block-container,
+[data-testid="stMainBlockContainer"]>.block-container {
+    padding-top: 1.5rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    padding-bottom: 3rem !important;
+    max-width: 960px !important;
+}
+
+/* ── HEADINGS ── */
+h1 {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+h3 {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+}
+
 h4,
 h5,
 h6 {
-    font-weight: 700 !important;
-    color: #0F172A !important;
-    letter-spacing: -0.025em;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+p,
+.stMarkdown p {
+    font-size: var(--font-size-base) !important;
+    color: #374151 !important;
+    line-height: 1.7 !important;
 }
 
 /* =============================================
-   SIDEBAR TOGGLE BUTTON (native stSidebarCollapseButton styled as FAB)
+   HAMBURGER / SIDEBAR TOGGLE
    ============================================= */
 
-/* The collapse button wrapper — fixed at top-left, always on top */
-[data-testid="stSidebarCollapseButton"] {
+/* Method A: style the built-in collapsedControl */
+[data-testid="collapsedControl"] {
+    background-color: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 6px !important;
+    color: var(--text-secondary) !important;
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
     position: fixed !important;
     top: 12px !important;
     left: 12px !important;
-    z-index: 999999 !important;
-    width: 34px !important;
-    height: 34px !important;
-    background: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    overflow: visible !important;
-    backdrop-filter: blur(8px) !important;
-    transition: all 0.2s ease !important;
+    z-index: 9999 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07) !important;
 }
 
-[data-testid="stSidebarCollapseButton"]:hover {
-    background: #EFF6FF !important;
-    border-color: #2563EB !important;
+[data-testid="collapsedControl"]:hover {
+    background-color: var(--bg-secondary) !important;
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
 }
 
-/* The actual button inside */
-[data-testid="stSidebarCollapseButton"] button {
-    width: 34px !important;
-    height: 34px !important;
+/* The inline toggle button inside the sidebar header (sidebar is open) */
+[data-testid="stSidebarCollapseButton"] {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    color: #64748B !important;
+    width: 32px !important;
+    height: 32px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    padding: 0 !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    color: var(--text-secondary) !important;
+    transition: var(--transition) !important;
 }
 
-[data-testid="stSidebarCollapseButton"] button:hover {
+[data-testid="stSidebarCollapseButton"]:hover {
+    background: var(--border-color) !important;
+    color: var(--accent) !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button {
     background: transparent !important;
-    color: #2563EB !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
-/* Hide text artifacts, keep only the SVG icon */
 [data-testid="stSidebarCollapseButton"] p,
 [data-testid="stSidebarCollapseButton"] span:not(svg *) {
     display: none !important;
 }
 
 [data-testid="stSidebarCollapseButton"] svg {
-    width: 18px !important;
-    height: 18px !important;
-    color: #64748B !important;
+    width: 17px !important;
+    height: 17px !important;
 }
 
+/* =============================================
+   SIDEBAR
+   ============================================= */
 [data-testid="stSidebar"] {
-    background: rgba(255, 255, 255, 0.85) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
-    /* No fixed width — allow Streamlit native collapse/expand */
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color) !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+    padding: 0 !important;
 }
 
 [data-testid="stSidebarContent"] {
     padding: 0 !important;
-}
-
-[data-testid="stSidebar"] [data-testid="stLogo"] {
-    padding: 20px 16px 14px !important;
-    border-bottom: 1px solid #E2E8F0;
-}
-
-/* =============================================
-   CUSTOM NAV BUTTONS
-   ============================================= */
-.nav-section-label {
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #94A3B8;
-    padding: 18px 18px 8px;
-    display: block;
-}
-
-/* Style Streamlit sidebar buttons as nav items */
-[data-testid="stSidebar"] .stButton>button {
     display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    padding: 9px 14px !important;
-    margin: 2px 0 !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    transition: all 0.18s ease !important;
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
-    color: #64748B !important;
-    text-decoration: none !important;
-    border: 1px solid transparent !important;
-    letter-spacing: -0.01em !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    width: 100% !important;
-    text-align: left !important;
-    justify-content: flex-start !important;
-    height: 38px !important;
-    box-sizing: border-box !important;
+    flex-direction: column !important;
+    height: 100% !important;
 }
 
-/* Zero-out the .stButton WRAPPER div's own padding & margin */
-[data-testid="stSidebar"] .stButton {
-    margin: 0 !important;
-    padding: 0 8px !important;
-    width: 100% !important;
+/* Logo area */
+[data-testid="stSidebar"] [data-testid="stLogo"] {
+    padding: 16px 12px 12px !important;
+    border-bottom: 1px solid var(--border-color);
 }
 
-/* Strip internal Streamlit column gap inside sidebar */
+/* ── SIDEBAR: Strip all internal block gap/padding ── */
 [data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"],
 [data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
     gap: 0 !important;
@@ -176,152 +203,204 @@ h6 {
     padding-bottom: 0 !important;
 }
 
-/* Force left-align on all inner elements Streamlit injects */
-[data-testid="stSidebar"] .stButton>button p,
-[data-testid="stSidebar"] .stButton>button div,
-[data-testid="stSidebar"] .stButton>button span {
+/* Force all sidebar text to left */
+[data-testid="stSidebar"] * {
+    text-align: left !important;
+}
+
+/* ── SIDEBAR NAV BUTTONS ── */
+[data-testid="stSidebar"] .stButton {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+[data-testid="stSidebar"] .stButton>button {
+    width: 100% !important;
     text-align: left !important;
     justify-content: flex-start !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 0.45rem 0.75rem !important;
+    margin: 1px 0 !important;
+    color: var(--text-primary) !important;
+    font-size: var(--font-size-base) !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    cursor: pointer !important;
+    transition: var(--transition) !important;
+    box-shadow: none !important;
+    height: auto !important;
+    min-height: unset !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+[data-testid="stSidebar"] .stButton>button p,
+[data-testid="stSidebar"] .stButton>button span,
+[data-testid="stSidebar"] .stButton>button div {
+    text-align: left !important;
     display: inline !important;
 }
 
 [data-testid="stSidebar"] .stButton>button:hover {
-    background: rgba(241, 245, 249, 0.9) !important;
-    color: #1E293B !important;
-    border-color: #E2E8F0 !important;
+    background-color: #E5E7EB !important;
+    color: var(--accent) !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
-
-
-/* Active nav item (rendered as HTML div) — same dimensions as the button */
+/* ── ACTIVE NAV ITEM (HTML div, not button) ── */
 .nav-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 14px;
-    margin: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.875rem;
+    gap: 8px;
+    width: 100%;
+    padding: 0.45rem 0.75rem;
+    margin: 1px 0;
+    border-radius: 6px;
+    font-size: var(--font-size-base);
     font-weight: 600;
-    letter-spacing: -0.01em;
-    height: 38px;
-    /* ← fixed height matches button */
+    background-color: var(--accent-light);
+    color: var(--accent);
     box-sizing: border-box;
-    border: 1px solid transparent;
-    /* keeps layout stable even without active border */
-}
-
-.nav-btn .nav-icon {
-    font-size: 1rem;
-    width: 20px;
-    text-align: center;
-    flex-shrink: 0;
-}
-
-.nav-btn.active {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-color: #BFDBFE;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-}
-
-/* Per-newsroom active accent color */
-.nav-btn.active-it {
-    color: #1E40AF !important;
-    border-color: #BFDBFE !important;
 }
 
 .nav-btn.active-mvno {
-    color: #065F46 !important;
-    border-color: #A7F3D0 !important;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+    background-color: #ECFDF5;
+    color: #065F46;
 }
 
 .nav-btn.active-kst {
-    color: #92400E !important;
-    border-color: #FDE68A !important;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+    background-color: #FFFBEB;
+    color: #92400E;
 }
 
+/* ── SIDEBAR SECTION LABEL ── */
+.nav-section-label {
+    font-size: var(--font-size-xs) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: var(--text-muted) !important;
+    padding: 1rem 0.75rem 0.25rem !important;
+    display: block !important;
+    margin-top: 0.25rem !important;
+}
 
-/* =============================================
-   SIDEBAR STATS
-   ============================================= */
+/* ── SIDEBAR STATS ── */
 .nav-stats {
-    padding: 14px 16px;
-    margin: 10px 8px 0;
-    border-top: 1px solid #E2E8F0;
-    font-size: 0.78rem;
-    color: #94A3B8;
+    padding: 10px 12px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border-color);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
     line-height: 2;
 }
 
 .nav-stats .stat-value {
-    color: #2563EB;
+    color: var(--accent);
     font-weight: 700;
 }
 
-/* =============================================
-   SIDEBAR ADMIN BUTTON (footer area)
-   ============================================= */
-/* Target only the admin_sidebar_btn — it renders after the footer markdown */
+/* ── SIDEBAR FOOTER ── */
+.sidebar-footer {
+    padding: 12px 10px 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border-color);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+.footer-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--text-secondary) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400;
+    transition: var(--transition);
+    padding: 3px 6px;
+    border-radius: 4px;
+}
+
+.footer-link:hover {
+    color: var(--accent) !important;
+    background: var(--accent-light);
+    text-decoration: none;
+}
+
+.footer-icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.footer-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 6px 6px;
+}
+
+/* Admin button in sidebar footer */
 [data-testid="stSidebar"] .stButton:last-child>button {
-    color: #94A3B8 !important;
-    font-size: 0.78rem !important;
-    font-weight: 500 !important;
-    padding: 6px 10px !important;
-    margin: 0 10px 8px !important;
-    border-radius: 6px !important;
-    width: calc(100% - 20px) !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+    color: var(--text-muted) !important;
+    font-size: var(--font-size-sm) !important;
+    font-weight: 400 !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    height: auto !important;
+    gap: 6px !important;
 }
 
 [data-testid="stSidebar"] .stButton:last-child>button:hover {
-    background: #EFF6FF !important;
-    color: #2563EB !important;
-    border: none !important;
-    box-shadow: none !important;
+    background-color: var(--accent-light) !important;
+    color: var(--accent) !important;
 }
 
 /* =============================================
-   MAIN CONTENT
+   MAIN CONTENT — Cards
    ============================================= */
-.main .block-container {
-    padding-top: 1.5rem !important;
-    padding-bottom: 3rem !important;
-    max-width: 900px;
+.main-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
 }
 
-/* =============================================
-   PAGE HEADER + DATE BADGE INLINE
-   ============================================= */
+/* ── PAGE HEADER ── */
 .page-title-row {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid #E2E8F0;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .page-title-row h1 {
-    font-size: 1.55rem !important;
+    font-size: 1.4rem !important;
     margin: 0 !important;
-    color: #0F172A !important;
 }
 
+/* ── DATE BADGE ── */
 .date-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
+    gap: 5px;
+    padding: 3px 10px;
     border-radius: 20px;
     background: #EFF6FF;
     border: 1px solid #BFDBFE;
-    color: #1D4ED8;
-    font-size: 0.78rem;
+    color: var(--accent);
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -361,47 +440,41 @@ h6 {
     flex-shrink: 0;
 }
 
-/* =============================================
-   SECTION HEADERS
-   ============================================= */
+/* ── SECTION HEADERS ── */
 .section-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 24px;
-    margin-bottom: 10px;
+    gap: 8px;
+    margin-top: 20px;
+    margin-bottom: 8px;
 }
 
 .section-label {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #94A3B8;
+    color: var(--text-muted);
     white-space: nowrap;
 }
 
 .section-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, #E2E8F0 0%, transparent 100%);
+    background: linear-gradient(90deg, var(--border-color) 0%, transparent 100%);
 }
 
-/* =============================================
-   NEWS CARDS — GLASSY
-   ============================================= */
+/* ── NEWS CARDS ── */
 .news-box {
-    background: rgba(255, 255, 255, 0.80);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 16px;
-    padding: 22px 26px;
-    margin-bottom: 14px;
-    border: 1px solid rgba(226, 232, 240, 0.7);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-primary);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .news-box::before {
@@ -410,44 +483,43 @@ h6 {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
-    border-radius: 16px 16px 0 0;
+    height: 3px;
+    border-radius: 10px 10px 0 0;
 }
 
 .news-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.09);
-    border-color: rgba(203, 213, 225, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
 }
 
 /* Headline — Blue */
 .box-headline::before {
-    background: linear-gradient(90deg, #2563EB, #60A5FA);
+    background: linear-gradient(90deg, #3B5BDB, #60A5FA);
 }
 
 .box-headline {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(239, 246, 255, 0.7));
+    background: linear-gradient(160deg, #ffffff, #EFF6FF88);
 }
 
-/* Trends — Green (MVNO override below) */
+/* Trends — Green */
 .box-trends::before {
     background: linear-gradient(90deg, #059669, #34D399);
 }
 
 .box-trends {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(240, 253, 250, 0.7));
+    background: linear-gradient(160deg, #ffffff, #F0FDF488);
 }
 
-/* Insight — Purple/Orange per category */
+/* Insight — Purple */
 .box-insight::before {
     background: linear-gradient(90deg, #7C3AED, #A78BFA);
 }
 
 .box-insight {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(245, 243, 255, 0.7));
+    background: linear-gradient(160deg, #ffffff, #F5F3FF88);
 }
 
-/* MVNO accent overrides */
+/* MVNO overrides */
 .mvno .box-headline::before {
     background: linear-gradient(90deg, #059669, #34D399);
 }
@@ -457,10 +529,10 @@ h6 {
 }
 
 .mvno .box-insight::before {
-    background: linear-gradient(90deg, #2563EB, #60A5FA);
+    background: linear-gradient(90deg, #3B5BDB, #60A5FA);
 }
 
-/* K-startup accent overrides */
+/* K-startup overrides */
 .kstartup .box-headline::before {
     background: linear-gradient(90deg, #D97706, #FBBF24);
 }
@@ -473,23 +545,21 @@ h6 {
     background: linear-gradient(90deg, #059669, #34D399);
 }
 
-/* =============================================
-   NEWS CONTENT
-   ============================================= */
+/* ── NEWS CONTENT ── */
 .news-content {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     line-height: 1.85;
-    color: #334155;
+    color: #374151;
     white-space: pre-wrap;
 }
 
 .news-content strong {
     display: inline-block;
-    margin-top: 12px;
-    margin-bottom: 5px;
-    padding: 3px 11px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    padding: 2px 10px;
     border-radius: 20px;
-    font-size: 0.78em;
+    font-size: 0.75em;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -511,95 +581,75 @@ h6 {
 }
 
 /* =============================================
-   STREAMLIT COMPONENTS OVERRIDES
+   STREAMLIT COMPONENT OVERRIDES
    ============================================= */
 
 /* Date input */
 [data-testid="stDateInput"] input {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid #E2E8F0 !important;
-    color: #1E293B !important;
-    border-radius: 10px !important;
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
     font-size: 0.85rem !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Buttons */
+/* All buttons (outside sidebar) */
 .stButton>button {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid #E2E8F0 !important;
-    color: #374151 !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    transition: all 0.2s !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: var(--transition) !important;
 }
 
-.stButton>button:hover {
-    background: #EFF6FF !important;
-    border-color: #2563EB !important;
-    color: #2563EB !important;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
-}
-
-/* Text inputs */
+/* Text / textarea inputs */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid #E2E8F0 !important;
-    color: #1E293B !important;
-    border-radius: 10px !important;
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: 6px !important;
 }
 
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
-    border-color: #2563EB !important;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 2px rgba(59, 91, 219, 0.12) !important;
 }
 
 /* Tabs */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
-    background: rgba(255, 255, 255, 0.6) !important;
-    border-radius: 12px 12px 0 0 !important;
-    border-bottom: 1px solid #E2E8F0 !important;
-    backdrop-filter: blur(8px) !important;
+    background: var(--bg-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab"] {
-    color: #64748B !important;
+    color: var(--text-secondary) !important;
     font-weight: 500 !important;
 }
 
 [data-testid="stTabs"] [aria-selected="true"] {
-    color: #2563EB !important;
-    border-bottom: 2px solid #2563EB !important;
+    color: var(--accent) !important;
+    border-bottom: 2px solid var(--accent) !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab-panel"] {
-    background: rgba(255, 255, 255, 0.7) !important;
-    border: 1px solid #E2E8F0 !important;
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
     border-top: none !important;
-    border-radius: 0 0 12px 12px !important;
-    backdrop-filter: blur(8px) !important;
+    border-radius: 0 0 8px 8px !important;
     padding: 16px !important;
 }
 
 /* Alerts */
 [data-testid="stAlert"] {
-    background: rgba(255, 255, 255, 0.8) !important;
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    backdrop-filter: blur(8px) !important;
-}
-
-/* Radio */
-[data-testid="stRadio"] label {
-    color: #374151 !important;
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px !important;
 }
 
 /* Divider */
 hr {
-    border-color: #E2E8F0 !important;
+    border-color: var(--border-color) !important;
 }
 
 /* Scrollbar */
@@ -609,7 +659,7 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-    background: #F1F5F9;
+    background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -622,85 +672,21 @@ hr {
 }
 
 /* =============================================
-   SIDEBAR FOOTER
-   ============================================= */
-.sidebar-footer {
-    padding: 14px 10px 10px;
-    margin-top: 20px;
-    border-top: 1px solid #E2E8F0;
-    font-size: 0.78rem;
-}
-
-.footer-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: #94A3B8 !important;
-    font-weight: 500;
-    transition: color 0.2s;
-    padding: 5px 10px;
-    border-radius: 6px;
-}
-
-.footer-link:hover {
-    color: #2563EB !important;
-    background: #EFF6FF;
-    text-decoration: none;
-}
-
-.footer-icon {
-    width: 14px;
-    height: 14px;
-    fill: currentColor;
-    flex-shrink: 0;
-}
-
-.footer-divider {
-    height: 1px;
-    background: #E2E8F0;
-    margin: 8px 10px;
-}
-
-.footer-admin-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #64748B;
-    font-size: 0.78rem;
-    font-weight: 500;
-    transition: all 0.2s;
-}
-
-.footer-admin-row:hover {
-    background: #EFF6FF;
-    color: #2563EB;
-}
-
-.footer-admin-row svg {
-    stroke: currentColor;
-    flex-shrink: 0;
-}
-
-/* =============================================
    ADMIN PAGE
    ============================================= */
 .admin-back-link {
-    font-size: 0.85rem;
-    color: #2563EB !important;
+    font-size: 0.84rem;
+    color: var(--accent) !important;
     text-decoration: none !important;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 16px;
-    padding: 5px 12px;
-    border-radius: 8px;
+    gap: 5px;
+    margin-bottom: 14px;
+    padding: 4px 10px;
+    border-radius: 6px;
     border: 1px solid #BFDBFE;
     background: #EFF6FF;
-    transition: all 0.2s;
+    transition: var(--transition);
     font-weight: 500;
 }
 
