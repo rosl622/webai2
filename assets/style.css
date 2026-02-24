@@ -77,51 +77,19 @@ h3 {
     color: #374151 !important;
 }
 
-/* =============================================
-   HAMBURGER / SIDEBAR TOGGLE
-   Streamlit shows [data-testid="collapsedControl"]
-   when the sidebar is collapsed.
-   ============================================= */
+/* ─── SIDEBAR ALWAYS VISIBLE — hide all toggle buttons ─── */
 [data-testid="collapsedControl"] {
-    visibility: visible !important;
-    opacity: 1 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: fixed !important;
-    top: 14px !important;
-    left: 14px !important;
-    z-index: 999999 !important;
-    width: 36px !important;
-    height: 36px !important;
-    background-color: var(--bg-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
-    cursor: pointer !important;
-    transition: var(--transition) !important;
-}
-
-[data-testid="collapsedControl"]:hover {
-    background-color: var(--accent-light) !important;
-    border-color: var(--accent) !important;
-    color: var(--accent) !important;
-}
-
-/* Sidebar open toggle (inside sidebar header) */
-[data-testid="stSidebarCollapseButton"] button {
-    visibility: visible !important;
-    opacity: 1 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: var(--text-secondary) !important;
-}
-
-[data-testid="stSidebarCollapseButton"] p,
-[data-testid="stSidebarCollapseButton"] span:not(svg *) {
     display: none !important;
 }
+
+[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button {
+    display: none !important;
+}
+
 
 /* =============================================
    SIDEBAR — DO NOT break the layout structure
