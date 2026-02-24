@@ -1,6 +1,5 @@
 /* =============================================
    ERIC'S AI NEWSROOM — Unified Style Sheet
-   Design Tokens + Full Streamlit Override
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -17,20 +16,17 @@
     --accent: #3B5BDB;
     --accent-hover: #2F4AC0;
     --accent-light: #EEF2FF;
-    --font-size-base: 14px;
-    --font-size-sm: 12px;
-    --font-size-xs: 11px;
-    --sidebar-width: 240px;
     --transition: all 0.2s ease;
 }
 
 /* ── BASE ── */
 * {
     box-sizing: border-box;
-    font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif !important;
 }
 
+body,
 .stApp {
+    font-family: 'Inter', 'Noto Sans KR', -apple-system, sans-serif !important;
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
 }
@@ -52,9 +48,8 @@ header {
     display: none;
 }
 
-/* ── MAIN CONTENT BLOCK ── */
-.main .block-container,
-[data-testid="stMainBlockContainer"]>.block-container {
+/* ── MAIN CONTENT ── */
+.main .block-container {
     padding-top: 1.5rem !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
@@ -82,83 +77,45 @@ h3 {
     color: #374151 !important;
 }
 
-h4,
-h5,
-h6 {
-    font-weight: 600 !important;
-    color: var(--text-primary) !important;
-}
-
-p,
-.stMarkdown p {
-    font-size: var(--font-size-base) !important;
-    color: #374151 !important;
-    line-height: 1.7 !important;
-}
-
 /* =============================================
    HAMBURGER / SIDEBAR TOGGLE
+   Streamlit shows [data-testid="collapsedControl"]
+   when the sidebar is collapsed.
    ============================================= */
-
-/* Method A: style the built-in collapsedControl */
 [data-testid="collapsedControl"] {
-    background-color: var(--bg-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 6px !important;
-    color: var(--text-secondary) !important;
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    position: fixed !important;
+    top: 14px !important;
+    left: 14px !important;
+    z-index: 999999 !important;
+    width: 36px !important;
+    height: 36px !important;
+    background-color: var(--bg-primary) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     cursor: pointer !important;
     transition: var(--transition) !important;
-    position: fixed !important;
-    top: 12px !important;
-    left: 12px !important;
-    z-index: 9999 !important;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07) !important;
 }
 
 [data-testid="collapsedControl"]:hover {
-    background-color: var(--bg-secondary) !important;
-    color: var(--accent) !important;
+    background-color: var(--accent-light) !important;
     border-color: var(--accent) !important;
-}
-
-/* The inline toggle button inside the sidebar header (sidebar is open) */
-[data-testid="stSidebarCollapseButton"] {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    width: 32px !important;
-    height: 32px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    color: var(--text-secondary) !important;
-    transition: var(--transition) !important;
-}
-
-[data-testid="stSidebarCollapseButton"]:hover {
-    background: var(--border-color) !important;
     color: var(--accent) !important;
 }
 
+/* Sidebar open toggle (inside sidebar header) */
 [data-testid="stSidebarCollapseButton"] button {
+    visibility: visible !important;
+    opacity: 1 !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    color: inherit !important;
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    color: var(--text-secondary) !important;
 }
 
 [data-testid="stSidebarCollapseButton"] p,
@@ -166,107 +123,84 @@ p,
     display: none !important;
 }
 
-[data-testid="stSidebarCollapseButton"] svg {
-    width: 17px !important;
-    height: 17px !important;
-}
-
 /* =============================================
-   SIDEBAR
+   SIDEBAR — DO NOT break the layout structure
    ============================================= */
 [data-testid="stSidebar"] {
     background-color: var(--bg-sidebar) !important;
     border-right: 1px solid var(--border-color) !important;
-    min-width: var(--sidebar-width) !important;
-    max-width: var(--sidebar-width) !important;
-    padding: 0 !important;
 }
 
-[data-testid="stSidebarContent"] {
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-}
-
-/* Logo area */
+/* Logo */
 [data-testid="stSidebar"] [data-testid="stLogo"] {
     padding: 16px 12px 12px !important;
     border-bottom: 1px solid var(--border-color);
 }
 
-/* ── SIDEBAR: Strip all internal block gap/padding ── */
-[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"],
-[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
-    gap: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+/* ── NAV SECTION LABEL ── */
+.nav-section-label {
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: var(--text-muted) !important;
+    padding: 16px 12px 6px !important;
+    display: block !important;
 }
 
-/* Force all sidebar text to left */
-[data-testid="stSidebar"] * {
-    text-align: left !important;
-}
-
-/* ── SIDEBAR NAV BUTTONS ── */
-[data-testid="stSidebar"] .stButton {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-}
-
+/* ── SIDEBAR BUTTONS: target button element specifically ── */
+[data-testid="stSidebar"] div[data-testid="stVerticalBlock"]>div[data-testid="stVerticalBlockBorderWrapper"]>div>div>div[class*="stButton"]>button,
 [data-testid="stSidebar"] .stButton>button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
     width: 100% !important;
     text-align: left !important;
-    justify-content: flex-start !important;
     background: transparent !important;
     border: none !important;
     border-radius: 6px !important;
-    padding: 0.45rem 0.75rem !important;
-    margin: 1px 0 !important;
+    padding: 7px 12px !important;
+    margin: 0 !important;
     color: var(--text-primary) !important;
-    font-size: var(--font-size-base) !important;
+    font-size: 14px !important;
     font-weight: 400 !important;
-    line-height: 1.5 !important;
+    line-height: 1.4 !important;
     cursor: pointer !important;
-    transition: var(--transition) !important;
     box-shadow: none !important;
-    height: auto !important;
-    min-height: unset !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-}
-
-[data-testid="stSidebar"] .stButton>button p,
-[data-testid="stSidebar"] .stButton>button span,
-[data-testid="stSidebar"] .stButton>button div {
-    text-align: left !important;
-    display: inline !important;
+    transition: var(--transition) !important;
 }
 
 [data-testid="stSidebar"] .stButton>button:hover {
     background-color: #E5E7EB !important;
     color: var(--accent) !important;
-    border: none !important;
-    box-shadow: none !important;
 }
 
-/* ── ACTIVE NAV ITEM (HTML div, not button) ── */
+/* Fix inner text inside sidebar buttons */
+[data-testid="stSidebar"] .stButton>button>* {
+    text-align: left !important;
+}
+
+[data-testid="stSidebar"] .stButton>button p {
+    margin: 0 !important;
+    text-align: left !important;
+    font-size: 14px !important;
+}
+
+/* ── ACTIVE NAV ITEM (HTML div) ── */
 .nav-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 100%;
-    padding: 0.45rem 0.75rem;
-    margin: 1px 0;
+    padding: 7px 12px;
+    margin: 0;
     border-radius: 6px;
-    font-size: var(--font-size-base);
+    font-size: 14px;
     font-weight: 600;
     background-color: var(--accent-light);
     color: var(--accent);
     box-sizing: border-box;
+    line-height: 1.4;
 }
 
 .nav-btn.active-mvno {
@@ -279,24 +213,12 @@ p,
     color: #92400E;
 }
 
-/* ── SIDEBAR SECTION LABEL ── */
-.nav-section-label {
-    font-size: var(--font-size-xs) !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    color: var(--text-muted) !important;
-    padding: 1rem 0.75rem 0.25rem !important;
-    display: block !important;
-    margin-top: 0.25rem !important;
-}
-
 /* ── SIDEBAR STATS ── */
 .nav-stats {
     padding: 10px 12px;
     margin-top: 8px;
     border-top: 1px solid var(--border-color);
-    font-size: var(--font-size-sm);
+    font-size: 12px;
     color: var(--text-muted);
     line-height: 2;
 }
@@ -308,12 +230,11 @@ p,
 
 /* ── SIDEBAR FOOTER ── */
 .sidebar-footer {
-    padding: 12px 10px 8px;
-    margin-top: 8px;
+    padding: 10px 10px 6px;
+    margin-top: 4px;
     border-top: 1px solid var(--border-color);
-    font-size: var(--font-size-sm);
+    font-size: 12px;
     color: var(--text-secondary);
-    line-height: 1.8;
 }
 
 .footer-link {
@@ -322,11 +243,11 @@ p,
     gap: 6px;
     text-decoration: none;
     color: var(--text-secondary) !important;
-    font-size: var(--font-size-sm) !important;
-    font-weight: 400;
-    transition: var(--transition);
-    padding: 3px 6px;
+    font-size: 12px !important;
+    padding: 3px 4px;
     border-radius: 4px;
+    line-height: 1.8;
+    transition: var(--transition);
 }
 
 .footer-link:hover {
@@ -344,49 +265,32 @@ p,
 .footer-divider {
     height: 1px;
     background: var(--border-color);
-    margin: 6px 6px;
+    margin: 6px 0;
 }
 
-/* Admin button in sidebar footer */
-[data-testid="stSidebar"] .stButton:last-child>button {
+/* Admin sidebar btn — style overriding .stButton:last-child is fragile,
+   use general sidebar button style instead */
+[data-testid="stSidebar"] .stButton>button[data-testid="baseButton-secondary"] {
+    font-size: 12px !important;
     color: var(--text-muted) !important;
-    font-size: var(--font-size-sm) !important;
     font-weight: 400 !important;
-    padding: 3px 6px !important;
-    border-radius: 4px !important;
-    height: auto !important;
-    gap: 6px !important;
-}
-
-[data-testid="stSidebar"] .stButton:last-child>button:hover {
-    background-color: var(--accent-light) !important;
-    color: var(--accent) !important;
 }
 
 /* =============================================
-   MAIN CONTENT — Cards
+   MAIN CONTENT — PAGE HEADER
    ============================================= */
-.main-card {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-/* ── PAGE HEADER ── */
 .page-title-row {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     padding-bottom: 14px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .page-title-row h1 {
-    font-size: 1.4rem !important;
+    font-size: 1.35rem !important;
     margin: 0 !important;
 }
 
@@ -445,7 +349,7 @@ p,
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 20px;
+    margin-top: 18px;
     margin-bottom: 8px;
 }
 
@@ -492,7 +396,6 @@ p,
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
 }
 
-/* Headline — Blue */
 .box-headline::before {
     background: linear-gradient(90deg, #3B5BDB, #60A5FA);
 }
@@ -501,7 +404,6 @@ p,
     background: linear-gradient(160deg, #ffffff, #EFF6FF88);
 }
 
-/* Trends — Green */
 .box-trends::before {
     background: linear-gradient(90deg, #059669, #34D399);
 }
@@ -510,7 +412,6 @@ p,
     background: linear-gradient(160deg, #ffffff, #F0FDF488);
 }
 
-/* Insight — Purple */
 .box-insight::before {
     background: linear-gradient(90deg, #7C3AED, #A78BFA);
 }
@@ -519,7 +420,6 @@ p,
     background: linear-gradient(160deg, #ffffff, #F5F3FF88);
 }
 
-/* MVNO overrides */
 .mvno .box-headline::before {
     background: linear-gradient(90deg, #059669, #34D399);
 }
@@ -532,7 +432,6 @@ p,
     background: linear-gradient(90deg, #3B5BDB, #60A5FA);
 }
 
-/* K-startup overrides */
 .kstartup .box-headline::before {
     background: linear-gradient(90deg, #D97706, #FBBF24);
 }
@@ -581,33 +480,21 @@ p,
 }
 
 /* =============================================
-   STREAMLIT COMPONENT OVERRIDES
+   STREAMLIT COMPONENTS
    ============================================= */
-
-/* Date input */
 [data-testid="stDateInput"] input {
     background: var(--bg-primary) !important;
     border: 1px solid var(--border-color) !important;
-    color: var(--text-primary) !important;
     border-radius: 6px !important;
     font-size: 0.85rem !important;
 }
 
-/* All buttons (outside sidebar) */
-.stButton>button {
-    border-radius: 6px !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    transition: var(--transition) !important;
-}
-
-/* Text / textarea inputs */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
     background: var(--bg-primary) !important;
     border: 1px solid var(--border-color) !important;
-    color: var(--text-primary) !important;
     border-radius: 6px !important;
+    color: var(--text-primary) !important;
 }
 
 [data-testid="stTextInput"] input:focus,
@@ -616,7 +503,6 @@ p,
     box-shadow: 0 0 0 2px rgba(59, 91, 219, 0.12) !important;
 }
 
-/* Tabs */
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
     background: var(--bg-primary) !important;
     border-bottom: 1px solid var(--border-color) !important;
@@ -624,7 +510,6 @@ p,
 
 [data-testid="stTabs"] [data-baseweb="tab"] {
     color: var(--text-secondary) !important;
-    font-weight: 500 !important;
 }
 
 [data-testid="stTabs"] [aria-selected="true"] {
@@ -640,19 +525,10 @@ p,
     padding: 16px !important;
 }
 
-/* Alerts */
-[data-testid="stAlert"] {
-    background: var(--bg-primary) !important;
-    border: 1px solid var(--border-color) !important;
-    border-radius: 8px !important;
-}
-
-/* Divider */
 hr {
     border-color: var(--border-color) !important;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -665,32 +541,4 @@ hr {
 ::-webkit-scrollbar-thumb {
     background: #CBD5E1;
     border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
-}
-
-/* =============================================
-   ADMIN PAGE
-   ============================================= */
-.admin-back-link {
-    font-size: 0.84rem;
-    color: var(--accent) !important;
-    text-decoration: none !important;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 14px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid #BFDBFE;
-    background: #EFF6FF;
-    transition: var(--transition);
-    font-weight: 500;
-}
-
-.admin-back-link:hover {
-    background: #DBEAFE !important;
-    text-decoration: none !important;
 }
