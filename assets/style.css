@@ -47,23 +47,63 @@ h6 {
 }
 
 /* =============================================
-   SIDEBAR
+   SIDEBAR TOGGLE BUTTON (native stSidebarCollapseButton styled as FAB)
    ============================================= */
-/* =============================================
-   SIDEBAR COLLAPSE BUTTON FIX
-   (hides the 'keyboard_double_arrow' text artifact)
-   ============================================= */
+
+/* The collapse button wrapper — fixed at top-left, always on top */
 [data-testid="stSidebarCollapseButton"] {
-    overflow: hidden !important;
-    background: rgba(255, 255, 255, 0.9) !important;
+    position: fixed !important;
+    top: 12px !important;
+    left: 12px !important;
+    z-index: 999999 !important;
+    width: 34px !important;
+    height: 34px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
     border: 1px solid #E2E8F0 !important;
     border-radius: 8px !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    backdrop-filter: blur(8px) !important;
+    transition: all 0.2s ease !important;
 }
 
+[data-testid="stSidebarCollapseButton"]:hover {
+    background: #EFF6FF !important;
+    border-color: #2563EB !important;
+}
+
+/* The actual button inside */
+[data-testid="stSidebarCollapseButton"] button {
+    width: 34px !important;
+    height: 34px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #64748B !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button:hover {
+    background: transparent !important;
+    color: #2563EB !important;
+}
+
+/* Hide text artifacts, keep only the SVG icon */
 [data-testid="stSidebarCollapseButton"] p,
-[data-testid="stSidebarCollapseButton"] span:not(svg span) {
+[data-testid="stSidebarCollapseButton"] span:not(svg *) {
     display: none !important;
+}
+
+[data-testid="stSidebarCollapseButton"] svg {
+    width: 18px !important;
+    height: 18px !important;
+    color: #64748B !important;
 }
 
 [data-testid="stSidebar"] {
@@ -117,7 +157,9 @@ h6 {
     width: calc(100% - 16px) !important;
     text-align: left !important;
     justify-content: flex-start !important;
-    min-height: unset !important;
+    height: 38px !important;
+    /* match nav-btn height exactly */
+    box-sizing: border-box !important;
 }
 
 /* Force left-align on all inner elements Streamlit injects */
@@ -135,12 +177,9 @@ h6 {
     border-color: #E2E8F0 !important;
 }
 
-/* Hide the native Streamlit collapse button — we use a custom FAB */
-[data-testid="stSidebarCollapseButton"] {
-    display: none !important;
-}
 
-/* Active nav item (rendered as HTML div) */
+
+/* Active nav item (rendered as HTML div) — same dimensions as the button */
 .nav-btn {
     display: flex;
     align-items: center;
@@ -151,6 +190,11 @@ h6 {
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: -0.01em;
+    height: 38px;
+    /* ← fixed height matches button */
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    /* keeps layout stable even without active border */
 }
 
 .nav-btn .nav-icon {
@@ -162,7 +206,7 @@ h6 {
 
 .nav-btn.active {
     background: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid #BFDBFE;
+    border-color: #BFDBFE;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
 }
 
