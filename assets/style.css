@@ -1,5 +1,6 @@
 /* =============================================
-   ERIC'S AI NEWSROOM — Unified Style Sheet
+   ERIC'S AI NEWSROOM — Unified Style Sheet v3
+   Modern White/Gray Theme · Fixed Sidebar
    ============================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
@@ -7,20 +8,27 @@
 /* ── DESIGN TOKENS ── */
 :root {
     --bg-primary: #FFFFFF;
-    --bg-secondary: #F7F8FA;
-    --bg-sidebar: #F2F3F5;
-    --border-color: #E2E4E8;
-    --text-primary: #1A1D23;
+    --bg-secondary: #F4F5F7;
+    --bg-sidebar: #FAFAFA;
+    --border-color: #E5E7EB;
+    --border-light: #F0F1F3;
+    --text-primary: #111827;
     --text-secondary: #6B7280;
     --text-muted: #9CA3AF;
-    --accent: #3B5BDB;
-    --accent-hover: #2F4AC0;
-    --accent-light: #EEF2FF;
-    --transition: all 0.2s ease;
+    --accent: #2563EB;
+    --accent-hover: #1D4ED8;
+    --accent-light: #EFF6FF;
+    --sidebar-width: 240px;
+    --transition: all 0.18s ease;
+    --radius: 8px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07);
 }
 
 /* ── BASE ── */
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -31,7 +39,7 @@ body,
     color: var(--text-primary) !important;
 }
 
-/* ── HIDE DEFAULT STREAMLIT CHROME ── */
+/* ── HIDE STREAMLIT CHROME ── */
 #MainMenu {
     visibility: hidden;
 }
@@ -48,86 +56,116 @@ header {
     display: none;
 }
 
-/* ── MAIN CONTENT ── */
-.main .block-container {
+/* ── HIDE ALL SIDEBAR TOGGLE BUTTONS (both collapse & expand) ── */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="collapsedControl"],
+[data-testid="collapsedControl"] button {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* =============================================
+   SIDEBAR — FIXED (always visible, no toggle)
+   ============================================= */
+
+/* Force sidebar to stay open and fixed */
+[data-testid="stSidebar"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    width: var(--sidebar-width) !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-color) !important;
+    z-index: 999 !important;
+    overflow-y: auto !important;
+    transform: none !important;
+    transition: none !important;
+    box-shadow: var(--shadow-sm) !important;
+}
+
+/* Remove all Streamlit's own sidebar animation/transform */
+[data-testid="stSidebar"][aria-expanded="false"] {
+    transform: none !important;
+    left: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Sidebar inner container */
+[data-testid="stSidebar"]>div:first-child {
+    padding: 0 !important;
+    width: var(--sidebar-width) !important;
+}
+
+/* Remove sidebar resize handle */
+[data-testid="stSidebarUserContent"] {
+    padding-top: 0 !important;
+}
+
+/* Logo area */
+[data-testid="stSidebar"] [data-testid="stLogo"] {
+    padding: 18px 14px 14px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* ── MAIN CONTENT: offset by sidebar width ── */
+.main .block-container,
+section.main>div.block-container,
+[data-testid="stMain"] .block-container,
+[data-testid="stAppViewBlockContainer"] {
+    margin-left: var(--sidebar-width) !important;
     padding-top: 1.5rem !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
     padding-bottom: 3rem !important;
-    max-width: 960px !important;
+    max-width: none !important;
+}
+
+/* Push the main section itself */
+[data-testid="stMain"],
+section[data-testid="stMain"] {
+    margin-left: var(--sidebar-width) !important;
+    width: calc(100% - var(--sidebar-width)) !important;
 }
 
 /* ── HEADINGS ── */
 h1 {
-    font-size: 22px !important;
+    font-size: 20px !important;
     font-weight: 700 !important;
     color: var(--text-primary) !important;
     letter-spacing: -0.02em;
 }
 
 h2 {
-    font-size: 18px !important;
+    font-size: 17px !important;
     font-weight: 600 !important;
     color: var(--text-primary) !important;
 }
 
 h3 {
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     color: #374151 !important;
 }
 
-/* ─── SIDEBAR TOGGLE BUTTONS ─── */
-/* 사이드바 내부 접기 버튼: 숨김 */
-[data-testid="stSidebarCollapseButton"] {
-    display: none !important;
-}
-
-[data-testid="stSidebarCollapseButton"] button {
-    display: none !important;
-}
-
-/* 사이드바가 닫혔을 때 나타나는 재열기(>) 버튼: 반드시 표시 */
-[data-testid="collapsedControl"] {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-[data-testid="collapsedControl"] button {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-
-/* =============================================
-   SIDEBAR — DO NOT break the layout structure
-   ============================================= */
-[data-testid="stSidebar"] {
-    background-color: var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-color) !important;
-}
-
-/* Logo */
-[data-testid="stSidebar"] [data-testid="stLogo"] {
-    padding: 16px 12px 12px !important;
-    border-bottom: 1px solid var(--border-color);
-}
-
 /* ── NAV SECTION LABEL ── */
 .nav-section-label {
-    font-size: 11px !important;
-    font-weight: 600 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.1em !important;
     color: var(--text-muted) !important;
-    padding: 16px 12px 6px !important;
+    padding: 18px 14px 6px !important;
     display: block !important;
 }
 
-/* ── SIDEBAR BUTTONS: target button element specifically ── */
-[data-testid="stSidebar"] div[data-testid="stVerticalBlock"]>div[data-testid="stVerticalBlockBorderWrapper"]>div>div>div[class*="stButton"]>button,
+/* ── SIDEBAR NAV BUTTONS ── */
 [data-testid="stSidebar"] .stButton>button {
     display: flex !important;
     align-items: center !important;
@@ -138,9 +176,9 @@ h3 {
     background: transparent !important;
     border: none !important;
     border-radius: 6px !important;
-    padding: 7px 12px !important;
-    margin: 0 !important;
-    color: var(--text-primary) !important;
+    padding: 8px 14px !important;
+    margin: 1px 0 !important;
+    color: var(--text-secondary) !important;
     font-size: 14px !important;
     font-weight: 400 !important;
     line-height: 1.4 !important;
@@ -150,32 +188,28 @@ h3 {
 }
 
 [data-testid="stSidebar"] .stButton>button:hover {
-    background-color: #E5E7EB !important;
-    color: var(--accent) !important;
+    background-color: #EFEFEF !important;
+    color: var(--text-primary) !important;
 }
 
-/* Fix inner text inside sidebar buttons */
-[data-testid="stSidebar"] .stButton>button>* {
-    text-align: left !important;
-}
-
+[data-testid="stSidebar"] .stButton>button>*,
 [data-testid="stSidebar"] .stButton>button p {
     margin: 0 !important;
     text-align: left !important;
     font-size: 14px !important;
 }
 
-/* ── ACTIVE NAV ITEM (HTML div) ── */
+/* ── ACTIVE NAV ITEM ── */
 .nav-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 12px;
-    margin: 0;
+    padding: 8px 14px;
+    margin: 1px 0;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
-    background-color: var(--accent-light);
+    background-color: #EBF1FC;
     color: var(--accent);
     box-sizing: border-box;
     line-height: 1.4;
@@ -183,20 +217,20 @@ h3 {
 
 .nav-btn.active-mvno {
     background-color: #ECFDF5;
-    color: #065F46;
+    color: #059669;
 }
 
 .nav-btn.active-kst {
-    background-color: #FFFBEB;
-    color: #92400E;
+    background-color: #FFF7ED;
+    color: #D97706;
 }
 
 /* ── SIDEBAR STATS ── */
 .nav-stats {
-    padding: 10px 12px;
-    margin-top: 8px;
-    border-top: 1px solid var(--border-color);
-    font-size: 12px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    border-top: 1px solid var(--border-light);
+    font-size: 11.5px;
     color: var(--text-muted);
     line-height: 2;
 }
@@ -208,9 +242,9 @@ h3 {
 
 /* ── SIDEBAR FOOTER ── */
 .sidebar-footer {
-    padding: 10px 10px 6px;
+    padding: 10px 12px 6px;
     margin-top: 4px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-light);
     font-size: 12px;
     color: var(--text-secondary);
 }
@@ -224,7 +258,7 @@ h3 {
     font-size: 12px !important;
     padding: 3px 4px;
     border-radius: 4px;
-    line-height: 1.8;
+    line-height: 1.9;
     transition: var(--transition);
 }
 
@@ -238,16 +272,16 @@ h3 {
     width: 13px;
     height: 13px;
     flex-shrink: 0;
+    opacity: 0.7;
 }
 
 .footer-divider {
     height: 1px;
-    background: var(--border-color);
+    background: var(--border-light);
     margin: 6px 0;
 }
 
-/* Admin sidebar btn — style overriding .stButton:last-child is fragile,
-   use general sidebar button style instead */
+/* Admin button inside sidebar footer */
 [data-testid="stSidebar"] .stButton>button[data-testid="baseButton-secondary"] {
     font-size: 12px !important;
     color: var(--text-muted) !important;
@@ -262,13 +296,13 @@ h3 {
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     padding-bottom: 14px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .page-title-row h1 {
-    font-size: 1.35rem !important;
+    font-size: 1.25rem !important;
     margin: 0 !important;
 }
 
@@ -282,20 +316,20 @@ h3 {
     background: #EFF6FF;
     border: 1px solid #BFDBFE;
     color: var(--accent);
-    font-size: 0.75rem;
+    font-size: 0.73rem;
     font-weight: 600;
 }
 
 .date-badge-mvno {
     background: #ECFDF5;
     border-color: #A7F3D0;
-    color: #065F46;
+    color: #059669;
 }
 
 .date-badge-kstartup {
-    background: #FFFBEB;
-    border-color: #FDE68A;
-    color: #92400E;
+    background: #FFF7ED;
+    border-color: #FED7AA;
+    color: #D97706;
 }
 
 @keyframes pulse-dot {
@@ -327,12 +361,12 @@ h3 {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 18px;
+    margin-top: 20px;
     margin-bottom: 8px;
 }
 
 .section-label {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -349,14 +383,14 @@ h3 {
 /* ── NEWS CARDS ── */
 .news-box {
     background: var(--bg-primary);
-    border-radius: 10px;
+    border-radius: var(--radius);
     padding: 20px 22px;
     margin-bottom: 12px;
     border: 1px solid var(--border-color);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--shadow-sm);
 }
 
 .news-box::before {
@@ -366,20 +400,21 @@ h3 {
     left: 0;
     width: 100%;
     height: 3px;
-    border-radius: 10px 10px 0 0;
+    border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .news-box:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+    box-shadow: var(--shadow-md);
 }
 
+/* IT theme */
 .box-headline::before {
-    background: linear-gradient(90deg, #3B5BDB, #60A5FA);
+    background: linear-gradient(90deg, #2563EB, #60A5FA);
 }
 
 .box-headline {
-    background: linear-gradient(160deg, #ffffff, #EFF6FF88);
+    background: linear-gradient(160deg, #fff 60%, #EFF6FF88);
 }
 
 .box-trends::before {
@@ -387,7 +422,7 @@ h3 {
 }
 
 .box-trends {
-    background: linear-gradient(160deg, #ffffff, #F0FDF488);
+    background: linear-gradient(160deg, #fff 60%, #F0FDF488);
 }
 
 .box-insight::before {
@@ -395,9 +430,10 @@ h3 {
 }
 
 .box-insight {
-    background: linear-gradient(160deg, #ffffff, #F5F3FF88);
+    background: linear-gradient(160deg, #fff 60%, #F5F3FF88);
 }
 
+/* MVNO overrides */
 .mvno .box-headline::before {
     background: linear-gradient(90deg, #059669, #34D399);
 }
@@ -407,9 +443,10 @@ h3 {
 }
 
 .mvno .box-insight::before {
-    background: linear-gradient(90deg, #3B5BDB, #60A5FA);
+    background: linear-gradient(90deg, #2563EB, #60A5FA);
 }
 
+/* K-Startup overrides */
 .kstartup .box-headline::before {
     background: linear-gradient(90deg, #D97706, #FBBF24);
 }
@@ -424,8 +461,8 @@ h3 {
 
 /* ── NEWS CONTENT ── */
 .news-content {
-    font-size: 0.9rem;
-    line-height: 1.85;
+    font-size: 0.88rem;
+    line-height: 1.9;
     color: #374151;
     white-space: pre-wrap;
 }
@@ -436,7 +473,7 @@ h3 {
     margin-bottom: 4px;
     padding: 2px 10px;
     border-radius: 20px;
-    font-size: 0.75em;
+    font-size: 0.73em;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.07em;
@@ -465,6 +502,7 @@ h3 {
     border: 1px solid var(--border-color) !important;
     border-radius: 6px !important;
     font-size: 0.85rem !important;
+    color: var(--text-primary) !important;
 }
 
 [data-testid="stTextInput"] input,
@@ -478,7 +516,7 @@ h3 {
 [data-testid="stTextInput"] input:focus,
 [data-testid="stTextArea"] textarea:focus {
     border-color: var(--accent) !important;
-    box-shadow: 0 0 0 2px rgba(59, 91, 219, 0.12) !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12) !important;
 }
 
 [data-testid="stTabs"] [data-baseweb="tab-list"] {
@@ -488,6 +526,7 @@ h3 {
 
 [data-testid="stTabs"] [data-baseweb="tab"] {
     color: var(--text-secondary) !important;
+    font-size: 0.87rem !important;
 }
 
 [data-testid="stTabs"] [aria-selected="true"] {
@@ -499,14 +538,15 @@ h3 {
     background: var(--bg-primary) !important;
     border: 1px solid var(--border-color) !important;
     border-top: none !important;
-    border-radius: 0 0 8px 8px !important;
-    padding: 16px !important;
+    border-radius: 0 0 var(--radius) var(--radius) !important;
+    padding: 18px !important;
 }
 
 hr {
     border-color: var(--border-color) !important;
 }
 
+/* ── SCROLLBAR ── */
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
@@ -517,6 +557,10 @@ hr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
+    background: #D1D5DB;
     border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
 }
