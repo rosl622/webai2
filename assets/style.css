@@ -77,11 +77,8 @@ h3 {
     color: #374151 !important;
 }
 
-/* ─── SIDEBAR ALWAYS VISIBLE — hide all toggle buttons ─── */
-[data-testid="collapsedControl"] {
-    display: none !important;
-}
-
+/* ─── SIDEBAR TOGGLE BUTTONS ─── */
+/* 사이드바 내부의 접기(닫기) 버튼만 숨김 */
 [data-testid="stSidebarCollapseButton"] {
     display: none !important;
 }
@@ -89,6 +86,8 @@ h3 {
 [data-testid="stSidebarCollapseButton"] button {
     display: none !important;
 }
+
+/* collapsedControl (사이드바가 닫혔을 때 다시 여는 > 버튼)은 표시 유지 */
 
 
 /* =============================================
