@@ -114,6 +114,17 @@ header {
     border-bottom: 1px solid var(--border-color) !important;
 }
 
+/* Force sidebar element containers to have no extra centering */
+[data-testid="stSidebar"] [data-testid="stElementContainer"],
+[data-testid="stSidebar"] [data-testid="element-container"] {
+    text-align: left !important;
+}
+
+/* Override Streamlit default stMarkdown centering inside sidebar */
+[data-testid="stSidebar"] .stMarkdown {
+    text-align: left !important;
+}
+
 /* ── MAIN CONTENT: offset by sidebar width ── */
 .main .block-container,
 section.main>div.block-container,
@@ -161,58 +172,78 @@ h3 {
     text-transform: uppercase !important;
     letter-spacing: 0.1em !important;
     color: var(--text-muted) !important;
-    padding: 18px 14px 6px !important;
+    padding: 18px 14px 8px !important;
     display: block !important;
 }
 
-/* ── SIDEBAR NAV BUTTONS ── */
-[data-testid="stSidebar"] .stButton>button {
+/* ── SIDEBAR NAV BUTTONS (inactive items) ── */
+[data-testid="stSidebar"] .stButton>button,
+[data-testid="stSidebar"] button[data-testid="baseButton-secondary"] {
     display: flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     gap: 8px !important;
     width: 100% !important;
+    min-height: 40px !important;
+    height: 40px !important;
     text-align: left !important;
     background: transparent !important;
     border: none !important;
     border-radius: 6px !important;
-    padding: 8px 14px !important;
-    margin: 1px 0 !important;
+    padding: 0 14px !important;
+    margin: 2px 0 !important;
     color: var(--text-secondary) !important;
     font-size: 14px !important;
     font-weight: 400 !important;
-    line-height: 1.4 !important;
+    line-height: 40px !important;
     cursor: pointer !important;
     box-shadow: none !important;
     transition: var(--transition) !important;
 }
 
-[data-testid="stSidebar"] .stButton>button:hover {
+[data-testid="stSidebar"] .stButton>button:hover,
+[data-testid="stSidebar"] button[data-testid="baseButton-secondary"]:hover {
     background-color: #EFEFEF !important;
     color: var(--text-primary) !important;
 }
 
+/* 버튼 내부 모든 자식 요소: 좌측 정렬 강제 */
 [data-testid="stSidebar"] .stButton>button>*,
-[data-testid="stSidebar"] .stButton>button p {
+[data-testid="stSidebar"] .stButton>button div,
+[data-testid="stSidebar"] .stButton>button span,
+[data-testid="stSidebar"] .stButton>button p,
+[data-testid="stSidebar"] .stButton>button [data-testid="stMarkdownContainer"],
+[data-testid="stSidebar"] .stButton>button [data-testid="stMarkdownContainer"] p {
     margin: 0 !important;
+    padding: 0 !important;
     text-align: left !important;
     font-size: 14px !important;
+    line-height: 1 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
 }
 
-/* ── ACTIVE NAV ITEM ── */
+/* ── ACTIVE NAV ITEM (HTML div) ── */
 .nav-btn {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 8px;
-    padding: 8px 14px;
-    margin: 1px 0;
+    padding: 0 14px;
+    margin: 2px 0;
     border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
     background-color: #EBF1FC;
     color: var(--accent);
     box-sizing: border-box;
-    line-height: 1.4;
+    min-height: 40px;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    text-align: left;
 }
 
 .nav-btn.active-mvno {
