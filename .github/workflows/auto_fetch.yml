@@ -1,8 +1,10 @@
 name: Daily Newsroom Auto-Fetch
 
 on:
-  # 수동으로만 실행 가능 (GitHub Actions 탭에서 "Run workflow" 버튼)
-  # 자동 스케줄(cron) 제거됨
+  # 매일 KST 오전 9시 자동 실행 (UTC 00:00)
+  schedule:
+    - cron: '0 0 * * *'
+  # 수동 실행도 가능 (GitHub Actions 탭에서 "Run workflow" 버튼)
   workflow_dispatch:
 
 jobs:
