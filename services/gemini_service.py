@@ -26,6 +26,15 @@ def generate_news_summary(news_items, category="IT"):
     elif category == "KSTARTUP":
         role_description = "한국 창업 생태계 및 스타트업 전문 애널리스트"
         focus_instruction = "다음 키워드(스타트업, 창업, 투자유치, VC, 액셀러레이터, 정부지원, 창업정책, K-startup, 유니콘, 시리즈A/B, 팁스, 중기부)를 중심으로 오늘의 주요 창업 생태계 동향을 분석해서"
+    elif category == "VIBECODING":
+        role_description = "AI 에이전트 코딩 도구 및 바이브코딩 비즈니스 전문 큐레이터"
+        focus_instruction = (
+            "다음 키워드(Antigravity, Claude Code, ChatGPT Codex, Cursor AI, Windsurf, "
+            "GitHub Copilot, Gemini Code Assist, Amazon Q Developer, "
+            "AI agent coding, vibe coding, 바이브코딩, agentic IDE, LLM 코딩, "
+            "AI pair programming, 코딩 AI, 코딩 에이전트)를 중심으로 "
+            "AI 코딩 도구의 최신 동향과 바이브코딩 생태계를 분석해서"
+        )
 
     prompt = f"""
     당신은 {role_description}입니다. 

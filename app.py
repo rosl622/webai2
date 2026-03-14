@@ -54,7 +54,7 @@ if 'page' not in st.session_state:
 # PAGE ROUTING (via session state)
 # =============================================
 page = st.session_state.page
-if page not in ["IT", "MVNO", "KSTARTUP", "ADMIN"]:
+if page not in ["IT", "MVNO", "KSTARTUP", "VIBECODING", "ADMIN"]:
     page = "IT"
 
 # =============================================
@@ -67,15 +67,17 @@ today_key = datetime.datetime.now().strftime('%Y-%m-%d')
 today_views = stats['daily_views'].get(today_key, 0)
 
 nav_items = [
-    ("IT",       "📡", "IT"),
-    ("MVNO",     "📱", "MVNO"),
-    ("KSTARTUP", "🚀", "K-STARTUP"),
+    ("IT",          "📡", "IT"),
+    ("MVNO",        "📱", "MVNO"),
+    ("KSTARTUP",    "🚀", "K-STARTUP"),
+    ("VIBECODING",  "🤖", "VibeCoding"),
 ]
 
 active_class_map = {
-    "IT":       "active-it",
-    "MVNO":     "active-mvno",
-    "KSTARTUP": "active-kst",
+    "IT":          "active-it",
+    "MVNO":        "active-mvno",
+    "KSTARTUP":    "active-kst",
+    "VIBECODING":  "active-vibe",
 }
 
 with st.sidebar:
@@ -171,6 +173,17 @@ CATEGORY_CONFIG = {
             "insight":  ("🌱", "#065F46"),
         }
     },
+    "VIBECODING": {
+        "title": "VibeCoding Daily Briefing",
+        "icon": "🤖",
+        "css_class": "vibecoding",
+        "badge_class": "date-badge-vibe",
+        "section_colors": {
+            "headline": ("🟣", "#6D28D9"),
+            "trends":   ("💜", "#7C3AED"),
+            "insight":  ("✨", "#9333EA"),
+        }
+    },
 }
 
 def render_newsroom(category):
@@ -231,7 +244,12 @@ def render_newsroom(category):
                 )
 
             with col_r:
-                insight_label = "🌱 스타트업 생태계 전망" if category == "KSTARTUP" else f'{sc["insight"][0]} 기술적 통찰과 전망'
+                if category == "KSTARTUP":
+                    insight_label = "🌱 스타트업 생태계 전망"
+                elif category == "VIBECODING":
+                    insight_label = "✨ AI 코딩 도구 전망과 미래"
+                else:
+                    insight_label = f'{sc["insight"][0]} 기술적 통찰과 전망'
                 st.markdown(
                     f'<div class="section-header">'
                     f'<span class="section-label">{insight_label}</span>'
@@ -331,7 +349,7 @@ def render_admin():
         return
 
     st.markdown("---")
-    res_category = st.radio("Select Target Newsroom", ["IT", "MVNO", "KSTARTUP"], horizontal=True)
+    res_category = st.radio("Select Target Newsroom", ["IT", "MVNO", "KSTARTUP", "VIBECODING"], horizontal=True)
     st.markdown("---")
 
     tab1, tab2, tab3 = st.tabs([
@@ -418,6 +436,8 @@ elif page == "MVNO":
     render_newsroom("MVNO")
 elif page == "KSTARTUP":
     render_newsroom("KSTARTUP")
+elif page == "VIBECODING":
+    render_newsroom("VIBECODING")
 elif page == "ADMIN":
     render_admin()
 else:

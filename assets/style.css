@@ -256,6 +256,11 @@ h3 {
     color: #D97706;
 }
 
+.nav-btn.active-vibe {
+    background-color: #F5F3FF;
+    color: #7C3AED;
+}
+
 /* ── SIDEBAR STATS ── */
 .nav-stats {
     padding: 10px 14px;
@@ -361,6 +366,12 @@ h3 {
     background: #FFF7ED;
     border-color: #FED7AA;
     color: #D97706;
+}
+
+.date-badge-vibe {
+    background: #F5F3FF;
+    border-color: #DDD6FE;
+    color: #7C3AED;
 }
 
 @keyframes pulse-dot {
@@ -488,6 +499,38 @@ h3 {
 
 .kstartup .box-insight::before {
     background: linear-gradient(90deg, #059669, #34D399);
+}
+
+/* VibeCoding overrides */
+.vibecoding .box-headline::before {
+    background: linear-gradient(90deg, #6D28D9, #A78BFA);
+}
+
+.vibecoding .box-trends::before {
+    background: linear-gradient(90deg, #7C3AED, #C4B5FD);
+}
+
+.vibecoding .box-insight::before {
+    background: linear-gradient(90deg, #9333EA, #E879F9);
+}
+
+.vibecoding .box-headline {
+    background: linear-gradient(160deg, #fff 60%, #F5F3FF88);
+}
+
+.vibecoding .box-headline .news-content strong {
+    background: #EDE9FE;
+    color: #5B21B6;
+}
+
+.vibecoding .box-trends .news-content strong {
+    background: #EDE9FE;
+    color: #6D28D9;
+}
+
+.vibecoding .box-insight .news-content strong {
+    background: #FAE8FF;
+    color: #7E22CE;
 }
 
 /* ── NEWS CONTENT ── */
