@@ -123,10 +123,18 @@ def get_feeds(category="IT"):
 
 def add_feed(url, category="IT"):
     if not db: return False
-    # Check strict uniqueness locally or rely on DB constraint
-    # Let's request to insert
+    # Check if this exact (category, url) pair already exists
+    existing = db.select("feeds", category=category, url=url)
+    if existing:
+        return False  # Already exists in this category
     res = db.insert("feeds", {"category": category, "url": url})
-    return res is not None
+    if res is None:
+        # 409 conflict: url unique constraint hit — update category if needed
+        # Fallback: try upsert by deleting old and reinserting
+        # For now, just return False so UI shows "already exists"
+        return False
+    return True
+
 
 def remove_feed(url, category="IT"):
     if not db: return False
