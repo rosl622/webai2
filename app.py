@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 import json
 import re
-from services import data_service, rss_service, gemini_service
+import services
 
 # =============================================
 # PAGE CONFIG (must be first)
@@ -62,7 +62,7 @@ if page not in ["IT", "MVNO", "KSTARTUP", "VIBECODING", "ADMIN"]:
 # =============================================
 st.logo("assets/logo.svg")
 
-stats = data_service.get_stats()
+stats = services.get_stats()
 today_key = datetime.datetime.now().strftime('%Y-%m-%d')
 today_views = stats['daily_views'].get(today_key, 0)
 
@@ -133,7 +133,7 @@ with st.sidebar:
 # COUNT VIEWS ONCE PER SESSION
 # =============================================
 if not st.session_state.view_counted:
-    data_service.increment_views()
+    services.increment_views()
     st.session_state.view_counted = True
 
 # =============================================
@@ -203,7 +203,7 @@ def render_newsroom(category):
     )
 
     # --- Load content ---
-    content = data_service.get_archive(date_str, category=category)
+    content = services.get_archive(date_str, category=category)
 
     if content:
         try:
@@ -280,7 +280,7 @@ def render_newsroom(category):
 # =============================================
 def render_comments(page_id):
     st.subheader("💬 Comments")
-    comments = data_service.get_comments(page_id)
+    comments = services.get_comments(page_id)
     if comments:
         for c in comments:
             col1, col2 = st.columns([8, 1])
@@ -296,7 +296,7 @@ def render_comments(page_id):
                 with st.popover("🗑️"):
                     pwd = st.text_input("Password", key=f"del_pwd_{c['id']}", type="password")
                     if st.button("Delete", key=f"del_btn_{c['id']}"):
-                        if data_service.delete_comment(c['id'], pwd):
+                        if services.delete_comment(c['id'], pwd):
                             st.success("Deleted!")
                             st.rerun()
                         else:
@@ -315,7 +315,7 @@ def render_comments(page_id):
         content = st.text_area("Comment")
         if st.form_submit_button("Post Comment"):
             if nick and pwd and content:
-                if data_service.add_comment(page_id, nick, pwd, content):
+                if services.add_comment(page_id, nick, pwd, content):
                     st.success("Comment posted!")
                     st.rerun()
                 else:
@@ -360,11 +360,11 @@ def render_admin():
 
     with tab1:
         st.subheader(f"Manage RSS Feeds — {res_category}")
-        feeds = data_service.get_feeds(category=res_category)
+        feeds = services.get_feeds(category=res_category)
         new_feed = st.text_input("Add new RSS URL", placeholder="https://...")
         if st.button("Add Feed"):
             if new_feed and new_feed.startswith("http"):
-                if data_service.add_feed(new_feed, category=res_category):
+                if services.add_feed(new_feed, category=res_category):
                     st.success(f"Feed added to {res_category}!")
                     st.rerun()
                 else:
@@ -378,7 +378,7 @@ def render_admin():
             col1, col2 = st.columns([5, 1])
             col1.code(feed, language=None)
             if col2.button("Remove", key=f"{res_category}_{feed}"):
-                data_service.remove_feed(feed, category=res_category)
+                services.remove_feed(feed, category=res_category)
                 st.rerun()
 
     with tab2:
@@ -390,15 +390,15 @@ def render_admin():
                 st.error("Please provide a Gemini API Key.")
             else:
                 with st.spinner(f"Fetching {res_category} RSS feeds..."):
-                    feeds = data_service.get_feeds(category=res_category)
-                    news_items = rss_service.fetch_all_feeds(feeds)
+                    feeds = services.get_feeds(category=res_category)
+                    news_items = services.fetch_all_feeds(feeds)
                     st.write(f"Fetched **{len(news_items)}** items.")
                 if news_items:
                     with st.spinner("Analyzing with Gemini AI..."):
-                        gemini_service.configure_gemini(gemini_key)
-                        summary = gemini_service.generate_news_summary(news_items, category=res_category)
+                        services.configure_gemini(gemini_key)
+                        summary = services.generate_news_summary(news_items, category=res_category)
                         today_str = datetime.date.today().strftime("%Y-%m-%d")
-                        data_service.save_archive(today_str, summary, category=res_category)
+                        services.save_archive(today_str, summary, category=res_category)
                         st.success(f"Analysis Complete! Saved to {res_category} archive.")
                         try:
                             data = json.loads(summary)
@@ -416,7 +416,7 @@ def render_admin():
 
     with tab3:
         st.subheader("Traffic Stats")
-        stats_data = data_service.get_stats()
+        stats_data = services.get_stats()
         daily_views = stats_data.get("daily_views", {})
         if daily_views:
             df = pd.DataFrame(list(daily_views.items()), columns=['Date', 'Views'])

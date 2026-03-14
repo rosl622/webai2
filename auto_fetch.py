@@ -88,9 +88,9 @@ class SupabaseClient:
         r.raise_for_status()
         return r.json()
 
-# --- RSS fetch (rss_service.py 재사용) ---
+# --- RSS fetch (services.py 재사용) ---
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from services import rss_service, gemini_service
+import services
 
 def get_feeds(db, category):
     rows = db.select("feeds", category=category)
@@ -118,7 +118,7 @@ def run():
         sys.exit(1)
 
     db = SupabaseClient(supabase_url, supabase_key)
-    gemini_service.configure_gemini(gemini_key)
+    services.configure_gemini(gemini_key)
 
     today_str = datetime.date.today().strftime("%Y-%m-%d")
     log.info(f"대상 날짜: {today_str}")
@@ -134,7 +134,7 @@ def run():
                 continue
 
             log.info(f"[{category}] {len(feeds)}개 피드 fetch 중...")
-            news_items = rss_service.fetch_all_feeds(feeds)
+            news_items = services.fetch_all_feeds(feeds)
             log.info(f"[{category}] {len(news_items)}개 뉴스 수집 완료")
 
             if not news_items:
@@ -142,7 +142,7 @@ def run():
                 continue
 
             log.info(f"[{category}] Gemini 분석 중...")
-            summary = gemini_service.generate_news_summary(news_items, category=category)
+            summary = services.generate_news_summary(news_items, category=category)
 
             # 에러 응답 체크
             try:

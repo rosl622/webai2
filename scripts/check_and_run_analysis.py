@@ -1,7 +1,7 @@
 import toml
 import os
 import datetime
-from services import data_service, rss_service, gemini_service
+import sys; sys.path.append(r".."); import services
 import streamlit as st
 
 # Mock st.secrets for services that might use it (data_service uses st.secrets)
@@ -24,13 +24,13 @@ else:
     exit(1)
 
 # Re-init db with loaded secrets
-data_service.db = data_service.init_supabase()
+services.db = services.init_supabase()
 
 def run_analysis_for_category(category):
     print(f"\nChecking {category} archive for today...")
     today_str = datetime.date.today().strftime("%Y-%m-%d")
     
-    archive = data_service.get_archive(today_str, category=category)
+    archive = services.get_archive(today_str, category=category)
     if archive:
         print(f"✅ {category} archive for {today_str} already exists.")
         return
@@ -38,13 +38,13 @@ def run_analysis_for_category(category):
     print(f"⚠️ {category} archive missing. Running analysis...")
     
     # 1. Fetch Feeds
-    urls = data_service.get_feeds(category=category)
+    urls = services.get_feeds(category=category)
     if not urls:
         print(f"❌ No feeds found for {category}")
         return
 
     print(f"  Fetching {len(urls)} feeds...")
-    news_items = rss_service.fetch_all_feeds(urls)
+    news_items = services.fetch_all_feeds(urls)
     print(f"  Fetched {len(news_items)} items.")
     
     if not news_items:
@@ -58,12 +58,12 @@ def run_analysis_for_category(category):
         print("❌ GEMINI_API_KEY not found in secrets")
         return
 
-    gemini_service.configure_gemini(gemini_key)
-    summary = gemini_service.generate_news_summary(news_items, category=category)
+    services.configure_gemini(gemini_key)
+    summary = services.generate_news_summary(news_items, category=category)
     
     # 3. Save
     if summary:
-        data_service.save_archive(today_str, summary, category=category)
+        services.save_archive(today_str, summary, category=category)
         print(f"✅ Saved {category} analysis for {today_str}")
     else:
         print("❌ Failed to generate summary")
