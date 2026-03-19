@@ -49,6 +49,9 @@ footer {
 }
 
 header {
+    background: transparent !important;
+}
+header [data-testid="stToolbar"] {
     visibility: hidden;
 }
 
