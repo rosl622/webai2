@@ -57,6 +57,19 @@ footer {
     display: none;
 }
 
+/* ── SIDEBAR TOGGLE BUTTON (MOBILE) ── */
+[data-testid="collapsedControl"] {
+    color: var(--accent) !important;
+    background-color: var(--bg-primary) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important; /* Subtle blue shadow */
+    border: 1px solid var(--accent-light) !important;
+}
+[data-testid="collapsedControl"] svg {
+    fill: var(--accent) !important;
+    color: var(--accent) !important;
+}
+
 /* =============================================
    SIDEBAR
    ============================================= */
