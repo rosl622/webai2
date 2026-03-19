@@ -59,6 +59,16 @@ header [data-testid="stToolbar"] {
     display: none;
 }
 
+/* Ensure sidebar toggle button is explicitly visible */
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    color: var(--text-primary) !important;
+    background-color: var(--bg-primary) !important;
+    border-radius: 50% !important;
+    box-shadow: var(--shadow-sm) !important;
+    z-index: 9999 !important;
+}
+
 /* =============================================
    SIDEBAR
    ============================================= */
