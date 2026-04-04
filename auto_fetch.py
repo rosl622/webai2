@@ -123,7 +123,7 @@ def run():
     today_str = datetime.date.today().strftime("%Y-%m-%d")
     log.info(f"대상 날짜: {today_str}")
 
-    categories = ["IT", "MVNO", "KSTARTUP"]
+    categories = ["IT", "MVNO", "KSTARTUP", "VIBECODING"]
 
     for category in categories:
         log.info(f"--- [{category}] 처리 시작 ---")
