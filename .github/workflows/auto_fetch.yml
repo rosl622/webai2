@@ -25,7 +25,7 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          pip install google-genai feedparser requests beautifulsoup4 toml
+          pip install google-genai feedparser requests beautifulsoup4 toml streamlit
 
       - name: 🚀 Run auto fetch
         env:
