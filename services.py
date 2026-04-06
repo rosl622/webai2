@@ -90,10 +90,14 @@ class SimpleSupabaseClient:
             print(f"Supabase Update Error: {e}")
             return None
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def init_supabase():
-    url = st.secrets.get("SUPABASE_URL")
-    key = st.secrets.get("SUPABASE_KEY")
+    try:
+        url = st.secrets.get("SUPABASE_URL")
+        key = st.secrets.get("SUPABASE_KEY")
+    except Exception:
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
     if not url or not key:
         return None
     return SimpleSupabaseClient(url, key)
