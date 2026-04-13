@@ -270,16 +270,16 @@ def generate_news_summary(news_items, category="IT"):
     """
 
     model_names = [
+        "gemini-2.5-flash",
         "gemini-2.0-flash-lite",
         "gemini-2.0-flash",
-        "gemini-2.5-flash",
-        "gemini-1.5-flash-latest",
+        "gemini-1.5-pro",
     ]
 
     last_error = None
     import time
     for model_name in model_names:
-        for attempt in range(2): # Try each model up to 2 times
+        for attempt in range(3): # Try each model up to 3 times
             try:
                 response = _client.models.generate_content(
                     model=model_name,
@@ -292,8 +292,11 @@ def generate_news_summary(news_items, category="IT"):
             except Exception as e:
                 last_error = e
                 # If it's a rate limit or service unavailable, wait then retry
-                if "429" in str(e) or "503" in str(e) or "Too Many Requests" in str(e):
-                    time.sleep(20)
+                if "429" in str(e) or "Too Many Requests" in str(e):
+                    time.sleep(60) # Wait 60s for quota to reset
+                    continue
+                elif "503" in str(e):
+                    time.sleep(30)
                     continue
                 else:
                     break # Break inner loop (do not retry this model), try next model
