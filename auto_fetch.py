@@ -159,6 +159,9 @@ def run():
 
         except Exception as e:
             log.error(f"[{category}] 오류 발생: {e}", exc_info=True)
+            
+        import time
+        time.sleep(15) # Rate limit 방지를 위해 15초 대기
 
     log.info("Auto-fetch 완료")
     log.info("=" * 50)

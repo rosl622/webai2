@@ -273,24 +273,29 @@ def generate_news_summary(news_items, category="IT"):
         "gemini-2.0-flash-lite",
         "gemini-2.0-flash",
         "gemini-2.5-flash",
-        "gemini-1.5-flash",
+        "gemini-1.5-flash-latest",
     ]
 
     last_error = None
+    import time
     for model_name in model_names:
-        try:
-            # print(f"Trying model: {model_name}...")
-            response = _client.models.generate_content(
-                model=model_name,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
-                ),
-            )
-            # print(f"Success with model: {model_name}")
-            return response.text.replace("```json", "").replace("```", "").strip()
-        except Exception as e:
-            last_error = e
-            continue
+        for attempt in range(2): # Try each model up to 2 times
+            try:
+                response = _client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json"
+                    ),
+                )
+                return response.text.replace("```json", "").replace("```", "").strip()
+            except Exception as e:
+                last_error = e
+                # If it's a rate limit or service unavailable, wait then retry
+                if "429" in str(e) or "503" in str(e) or "Too Many Requests" in str(e):
+                    time.sleep(20)
+                    continue
+                else:
+                    break # Break inner loop (do not retry this model), try next model
 
     return f'{{"headline": "Error: All models failed.", "trends": "Last error: {str(last_error)}", "insight": ""}}'
